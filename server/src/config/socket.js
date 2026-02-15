@@ -1,6 +1,5 @@
 import { Server} from "socket.io";
 import { ENV } from "./env.js";
-import { disconnect } from "mongoose";
 
 let io;
 
