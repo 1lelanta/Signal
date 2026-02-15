@@ -1,4 +1,4 @@
-import dotenv from dotenv;
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -6,8 +6,6 @@ const requiredEnv = [
     "PORT",
     "MONGO_URI",
     "JWT_SECRET",
-    "CLIENT_SECRET",
-    "CLIENT_URL"
 ]
 
 requiredEnv.forEach((key)=>{
