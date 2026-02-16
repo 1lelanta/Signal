@@ -38,3 +38,18 @@ export const publishPost = async (req,res)=>{
         res.status(500).json({message:error.message})
     }
 }
+
+export const getSinglePost = async(req,res)=>{
+    try {
+        const post = await Post.findById(req.params.id)
+        .populate("author", "username reputationScore")
+        .populate("comments")
+
+        if(!post) return res.status(404).json({message: "Post not found"})
+
+        res.json(post);
+    } catch (error) {
+        res.status(500).json({message:error.message});
+        
+    }
+}
