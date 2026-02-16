@@ -3,6 +3,7 @@ import app from "./app.js";
 import connectDB from "./config/db.js";
 import { ENV } from "./config/env.js";
 import { initSocket } from "./config/socket.js";
+import { initJobs } from "./jobs/index.js";
 
 connectDB();
 
@@ -12,3 +13,5 @@ initSocket(server);
 server.listen(ENV.PORT, ()=>{
     console.log(`server running on port ${ENV.PORT}`);
 });
+
+initJobs();
