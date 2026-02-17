@@ -88,3 +88,22 @@ export const loginUser = asyncHandler(async (req,res)=>{
         }
     })
 })
+
+/**
+ * @desc    Get current logged in user
+ * @route   GET /api/auth/me
+ * @access  Private
+ */
+
+export const getMe = asyncHandler(async (req,res)=>{
+    const user = await User.findById(req.user.id).select("-password");
+    if(!user){
+        res.status(404);
+        throw new Error("User not found");
+    }
+
+    res.json({
+        success:true,
+        user
+    })
+})
