@@ -45,3 +45,46 @@ export const registerUser = asyncHandler(async(req,res)=>{
         }
     })
 })
+
+/**
+ * @desc    Login user
+ * @route   POST /api/auth/login
+ * @access  Public
+ */
+
+export const loginUser = asyncHandler(async (req,res)=>{
+    const {email, password} = req.body;
+
+    if(!email || !password){
+        res.status(400);
+        throw new Error("email and password are required");
+    }
+
+    const user  = await User.findOne({email})
+
+    if(!user){
+        res.status(401);
+        throw new Error("Invalid credentials")
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password)
+
+    if(!isMatch){
+        res.status(401);
+        throw new Error("Invalid credentials");
+    }
+
+    const token = generateToken({id:user._id});
+
+    res.json({
+        success:true,
+        token,
+        user:{
+            id:user._id,
+            username:user.username,
+            email:user.email,
+            reputationScore:user.reputationScore,
+            trustLevel:user.trustLevel
+        }
+    })
+})
