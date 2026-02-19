@@ -12,7 +12,7 @@ export const getUserProfile = async(req, res)=>{
 
         res.json(user);
     } catch (error) {
-        res.status(500).json({message, error.message});
+        res.status(500).json({message:error.message});
 
     }
 }

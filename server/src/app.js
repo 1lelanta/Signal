@@ -9,11 +9,6 @@ import commentRoutes from "./routes/comment.routes.js";
 import feedRoutes from "./routes/feed.routes.js";
 import reputationRoutes from "./routes/reputation.routes.js";
 
-import { errorHandler } from "./middleware/error.middleware.js";
-
-
-
-
 
 const app = express();
 

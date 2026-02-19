@@ -8,10 +8,9 @@ import {
 
 import { protect } from "../middleware/auth.middleware.js";
 import { validatePostInput } from "../middleware/validate.middleware.js";
-import router from "./auth.routes.js";
 
 
-router = express.Router();
+let router = express.Router();
 
 router.post("/", protect, validatePostInput, createPost);
 
