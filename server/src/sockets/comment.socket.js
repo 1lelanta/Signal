@@ -4,4 +4,6 @@ export const registerCommentSocket = (io,socket)=>{
     });
 };
 
-export const emitNewComment = (io,postId, comment)
+export const emitNewComment = (io,postId, comment)=>{
+    io.to(`post_${postId}`).emmit("newComment", comment)
+}
