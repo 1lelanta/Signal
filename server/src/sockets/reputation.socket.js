@@ -5,3 +5,9 @@ export const registerReputationSocket = (io, socket)=>{
         socket.join(`reputation_${userId}`)
     })
 }
+
+export const emitReputationUpdate = (io,userId,reputationScore)=>{
+    io.to(`reputation_${userId}`).emit("reputationUpdated",{
+        reputationScore
+    })
+}
