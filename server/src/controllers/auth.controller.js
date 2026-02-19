@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import User from "../models/User.model.js";
 import { generateToken } from "../config/jwt.js";
 import { asyncHandler } from "../middleware/asyncHandler.js";
-import { registerService } from "../services/auth.service.js";
+import { loginSerice, registerService } from "../services/auth.service.js";
 
 /**
  * @desc    Register new user
@@ -40,32 +40,11 @@ export const loginUser = asyncHandler(async (req,res)=>{
         throw new Error("email and password are required");
     }
 
-    const user  = await User.findOne({email})
-
-    if(!user){
-        res.status(401);
-        throw new Error("Invalid credentials")
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password)
-
-    if(!isMatch){
-        res.status(401);
-        throw new Error("Invalid credentials");
-    }
-
-    const token = generateToken({id:user._id});
+    const data = await loginSerice({email, password});
 
     res.json({
         success:true,
-        token,
-        user:{
-            id:user._id,
-            username:user.username,
-            email:user.email,
-            reputationScore:user.reputationScore,
-            trustLevel:user.trustLevel
-        }
+        ...data
     })
 })
 
