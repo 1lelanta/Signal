@@ -29,3 +29,24 @@ export const registerService = async ({username, email, password})=>{
         }
     }
 }
+
+export const loginSerice = async ({email, password})=>{
+    const user = await User.findOne({email});
+    if(!user) throw new Error("Invalid credentials");
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if(!isMatch) throw new Error("Invalid credentials");
+
+    const token = generateToken({id:user._id})
+
+    return {
+    token,
+    user: {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      reputationScore: user.reputationScore,
+      trustLevel: user.trustLevel,
+    },
+  };
+}
