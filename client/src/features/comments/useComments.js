@@ -18,5 +18,19 @@ export const useComments = (postId)=>{
         }
     };
 
-    const addComment = async(text, parentId=null)=>
+    const addComment = async(text, parentId=null)=>{
+        try {
+            const newComment = await createComment({
+                postId,
+                text,
+                parentId
+            });
+            setComments((prev)=>[...prev, newComment])
+        } catch (err) {
+            console.error(err);
+            
+        }
+    };
+
+    
 } 
