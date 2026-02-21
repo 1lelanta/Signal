@@ -14,3 +14,16 @@ api.interceptors.request.use((config)=>{
     }
     return config
 });
+
+// handle global errors
+api.interceptors.response.use(
+    (response)=>response,
+    (error)=>{
+        if(error.response?.status  === 401){
+            console.warn("Unauthorized. Redirect to login. ")
+        }
+        return Promise.reject(error);
+    }
+    )
+
+    export default api
