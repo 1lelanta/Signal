@@ -8,3 +8,8 @@ export const getCommentsByPost = async(postId)=>{
 export const createComment = async(payload)=>{
     const res = await api.post(`/comments`, payload)
 };
+
+export const deleteComment = async(commentId)=>{
+    const res = await api.delete(`/comments/${commentId}`);
+    return res.data
+}
