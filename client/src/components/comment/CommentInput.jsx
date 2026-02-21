@@ -24,3 +24,5 @@ const CommentInput = ({onSubmit, parentId = null})=>{
         </form>
     )
 }
+
+export default CommentInput
