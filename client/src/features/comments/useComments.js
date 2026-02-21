@@ -31,6 +31,16 @@ export const useComments = (postId)=>{
             
         }
     };
+    useEffect(()=>{
+        if(postId) fetchComments();
+    }, [postId]);
+
+    return {
+        comments,
+        loading,
+        addComment,
+        removeComment
+    }
 
     
 } 
