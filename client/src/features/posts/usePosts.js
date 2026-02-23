@@ -1,4 +1,4 @@
-(import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import api from "../../services/axios";
 
 export function usePosts(userId = null) {
