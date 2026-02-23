@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../features/auth/useAuth";
-import Button from "../../components/ui/Button";
-import Input from "../../components/ui/Input";
+import Button from "../components/ui/Button";
+import Input from "../components/ui/Input";
 
 const Register = () => {
   const { register } = useAuth();
