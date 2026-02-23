@@ -1,8 +1,8 @@
 import express from "express";
 import { getFeed } from "../controllers/feed.controller.js";
-import { protect } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-router.get("/", protect, getFeed);
+// Public feed (no auth required for reading)
+router.get("/", getFeed);
 export default router;
