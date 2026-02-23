@@ -2,6 +2,7 @@ import { Server } from "socket.io";
 import { registerNotificationSocket } from "../sockets/notification.socket.js";
 import { registerCommentSocket } from "../sockets/comment.socket.js";
 import { registerReputationSocket } from "../sockets/reputation.socket.js";
+import { ENV } from "./env.js";
 
 let io;
 const onlineUsers = new Map(); // userId -> socketId
@@ -9,8 +10,9 @@ const onlineUsers = new Map(); // userId -> socketId
 export const initSocket = (server) => {
   io = new Server(server, {
     cors: {
-      origin: "*", // change in production
+      origin: ENV.CLIENT_URL || "http://localhost:5173",
       methods: ["GET", "POST"],
+      credentials: true,
     },
   });
 
