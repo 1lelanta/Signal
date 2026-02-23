@@ -4,3 +4,5 @@ export const depthColor = (depth) => {
   if (depth <= 10) return "bg-purple-500/20 text-purple-400";
   return "bg-red-500/20 text-red-400";
 };
+
+export default depthColor;
