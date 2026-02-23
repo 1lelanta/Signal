@@ -1,4 +1,4 @@
-import PostComposer from "../components/post/PostComposer";
+import PostComposer from "../components/post/postComposer";
 import PostList from "../components/post/PostList";
 import { usePosts } from "../features/posts/usePosts";
 
