@@ -4,7 +4,7 @@ import socket from "../../services/socket";
 
 export const useReputation = (userId)=>{
     const [score, setScore] = useState(0)
-    cosnt [loading,setLoading] = useState(false);
+    const [loading,setLoading] = useState(false);
 
     const fetchReputation  = async()=>{
         try {
