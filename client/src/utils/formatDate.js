@@ -17,3 +17,5 @@ export const formatDate = (dateString) => {
 
   return date.toLocaleDateString();
 };
+
+export default formatDate;
