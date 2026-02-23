@@ -2,18 +2,28 @@ import { useState } from "react";
 import { useAuth } from "../features/auth/useAuth";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
+import { registerUser } from "../features/auth/authAPI";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-  const { register } = useAuth();
+  const { login } = useAuth();
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     username: "",
     email: "",
     password: "",
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    register(form);
+    try {
+      const data = await registerUser(form);
+      // API returns { success, token, user }
+      login(data.user, data.token);
+      navigate("/");
+    } catch (err) {
+      console.error("Register failed", err);
+    }
   };
 
   return (
