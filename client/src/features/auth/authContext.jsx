@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { getCurrentUser } from "./authAPI";
+import api from "../../services/axios";
 
 export const AuthContext = createContext();
 
@@ -9,7 +10,16 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const loadUser = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+
+      // token exists - attempt to load user
       try {
+        api.defaults.headers.Authorization = `Bearer ${token}`;
         const data = await getCurrentUser();
         setUser(data.user);
       } catch (err) {
@@ -24,6 +34,8 @@ export const AuthProvider = ({ children }) => {
 
   const login = (userData, token) => {
     localStorage.setItem("token", token);
+    // ensure axios sends Authorization for subsequent requests
+    api.defaults.headers.Authorization = `Bearer ${token}`;
     setUser(userData);
   };
 
