@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../features/auth/useAuth";
 
 import Home from "../pages/Home";
@@ -11,11 +11,12 @@ import Layout from "../components/layout/Layout";
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
+  const location = useLocation();
 
-  if (loading) return null;
+  if (loading) return <div>Loading...</div>;
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   return children;
@@ -33,10 +34,10 @@ const Router = () => {
           path="/profile"
           element={
             <ProtectedRoute>
-                <Layout>
-                  <Profile />
-                </Layout>
-              </ProtectedRoute>
+              <Layout>
+                <Profile />
+              </Layout>
+            </ProtectedRoute>
           }
         />
 
@@ -44,10 +45,10 @@ const Router = () => {
           path="/post/:id"
           element={
             <ProtectedRoute>
-                <Layout>
-                  <PostDetails />
-                </Layout>
-              </ProtectedRoute>
+              <Layout>
+                <PostDetails />
+              </Layout>
+            </ProtectedRoute>
           }
         />
 
