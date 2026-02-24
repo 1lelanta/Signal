@@ -3,13 +3,13 @@ import PostList from "../components/post/PostList";
 import { usePosts } from "../features/posts/usePosts";
 
 const Home = () => {
-  const { posts, loading } = usePosts();
+  const { posts, loading, createPost } = usePosts();
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
 
       {/* Create Post */}
-      <PostComposer />
+      <PostComposer onSubmit={createPost} />
 
       {/* Feed */}
       {loading ? (
