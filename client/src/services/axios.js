@@ -5,6 +5,14 @@ const api = axios.create({
     withCredentials:true,
 });
 
+// if a token exists from a previous session, set it so early requests include Authorization
+try{
+    const _token = localStorage.getItem("token");
+    if(_token){
+        api.defaults.headers.Authorization = `Bearer ${_token}`;
+    }
+}catch(e){}
+
 //atach token authomatically
 api.interceptors.request.use((config)=>{
     const token = localStorage.getItem("token");
