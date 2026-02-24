@@ -42,6 +42,11 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem("token");
+    try{
+      if(api?.defaults?.headers?.common){
+        delete api.defaults.headers.common.Authorization;
+      }
+    }catch(e){}
     setUser(null);
   };
 
