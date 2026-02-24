@@ -35,7 +35,8 @@ export const AuthProvider = ({ children }) => {
   const login = (userData, token) => {
     localStorage.setItem("token", token);
     // ensure axios sends Authorization for subsequent requests
-    api.defaults.headers.Authorization = `Bearer ${token}`;
+    api.defaults.headers.common = api.defaults.headers.common || {};
+    api.defaults.headers.common.Authorization = `Bearer ${token}`;
     setUser(userData);
   };
 

@@ -9,7 +9,8 @@ const api = axios.create({
 try{
     const _token = localStorage.getItem("token");
     if(_token){
-        api.defaults.headers.Authorization = `Bearer ${_token}`;
+        api.defaults.headers.common = api.defaults.headers.common || {};
+        api.defaults.headers.common.Authorization = `Bearer ${_token}`;
     }
 }catch(e){}
 
@@ -18,7 +19,11 @@ api.interceptors.request.use((config)=>{
     const token = localStorage.getItem("token");
 
     if(token){
+        // set both header shapes to be safe
+        config.headers = config.headers || {};
         config.headers.Authorization = `Bearer ${token}`;
+        if(!config.headers.common) config.headers.common = {};
+        config.headers.common.Authorization = `Bearer ${token}`;
     }
     // debug: log outgoing request url and Authorization header
     try{
