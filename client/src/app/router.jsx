@@ -7,6 +7,7 @@ import Register from "../pages/Register";
 import Profile from "../pages/Profile";
 import PostDetails from "../pages/PostDetails";
 import NotFound from "../pages/NotFound";
+import Layout from "../../components/layout/Layout";
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -24,7 +25,7 @@ const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Layout><Home /></Layout>} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
@@ -32,8 +33,10 @@ const Router = () => {
           path="/profile"
           element={
             <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
+                <Layout>
+                  <Profile />
+                </Layout>
+              </ProtectedRoute>
           }
         />
 
@@ -41,8 +44,10 @@ const Router = () => {
           path="/post/:id"
           element={
             <ProtectedRoute>
-              <PostDetails />
-            </ProtectedRoute>
+                <Layout>
+                  <PostDetails />
+                </Layout>
+              </ProtectedRoute>
           }
         />
 
