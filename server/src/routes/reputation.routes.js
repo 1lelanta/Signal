@@ -1,7 +1,7 @@
 import express from "express";
 import { protect } from "../middleware/auth.middleware.js";
 import { authorizeRoles } from "../middleware/role.middleware.js";
-import { updateUserProfile } from "../controllers/user.controller.js";
+import { updateReputation, getReputation } from "../controllers/reputation.controller.js";
 
 const router = express.Router();
 
@@ -23,5 +23,15 @@ router.post(
         res.json({message: "Reputation updated"});
     }
 );
+
+// public: get user's reputation score
+router.get("/:userId", async (req, res) => {
+    try {
+        const data = await getReputation(req.params.userId);
+        return res.json({ success: true, score: data.score });
+    } catch (err) {
+        return res.status(404).json({ success: false, message: err.message || 'Not found' });
+    }
+});
 
 export default router;

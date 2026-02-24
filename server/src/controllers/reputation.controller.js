@@ -16,3 +16,9 @@ export const updateReputation = async(userId, points, reason,sourceType,sourceId
     user.reputationScore +=points;
     await user.save();
 }
+
+export const getReputation = async (userId) => {
+    const user = await User.findById(userId).select("reputationScore");
+    if(!user) throw new Error("User not found");
+    return { score: user.reputationScore };
+}
