@@ -87,6 +87,12 @@ export const uploadUserAvatar = async (req, res) => {
             return res.status(400).json({ message: "Avatar image file is required" });
         }
 
+        if (!ENV.SUPABASE_SERVICE_ROLE_KEY) {
+            return res.status(500).json({
+                message: "SUPABASE_SERVICE_ROLE_KEY is required for server-side uploads",
+            });
+        }
+
         if (!supabase || !ENV.SUPABASE_BUCKET) {
             return res.status(500).json({ message: "Supabase storage is not configured" });
         }
@@ -105,7 +111,7 @@ export const uploadUserAvatar = async (req, res) => {
             });
 
         if (uploadError) {
-            return res.status(500).json({ message: uploadError.message });
+            return res.status(500).json({ message: `Supabase upload failed: ${uploadError.message}` });
         }
 
         const { data: publicData } = supabase.storage
