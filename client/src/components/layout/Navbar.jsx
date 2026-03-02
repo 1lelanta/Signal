@@ -10,7 +10,7 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 z-50 bg-slate-900 border-b border-slate-800">
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 flex items-center justify-between h-16 gap-3">
+      <div className="w-full px-3 sm:px-4 flex items-center justify-between h-16 gap-3">
         
         <Link 
           to="/" 
