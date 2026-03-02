@@ -9,13 +9,13 @@ export const createPost = async (req, res)=>{
         const {title, content, tags, imageUrl} = req.body;
 
         const safeContent = (content || "").trim();
-        const safeTitle = (title || safeContent.slice(0, 80)).trim();
+        const safeTitle = (title || safeContent.slice(0, 80) || "Image post").trim();
 
 
         const post = await Post.create({
             author: req.user.id,
             title: safeTitle,
-            content: safeContent,
+            content: safeContent || "",
             imageUrl: imageUrl || null,
             tags,
             reflectionExpiresAt: new Date(Date.now()+2*60*1000)// 2min
