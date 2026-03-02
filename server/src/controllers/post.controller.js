@@ -2,7 +2,7 @@ import Post from "../models/Post.model.js";
 import {calculateDepthScore} from "../utils/depthScore.js";
 import path from "path";
 import { ENV } from "../config/env.js";
-import supabase from "../config/supabase.js";
+import supabase, { ensureBucketExists } from "../config/supabase.js";
 
 export const createPost = async (req, res)=>{
     try {
@@ -43,6 +43,8 @@ export const uploadPostImage = async (req, res) => {
                 message: "Supabase storage is not configured",
             });
         }
+
+        await ensureBucketExists(ENV.SUPABASE_BUCKET);
 
         const fileExt = path.extname(req.file.originalname || "").toLowerCase() || ".jpg";
         const safeExt = [".jpg", ".jpeg", ".png", ".webp", ".gif"].includes(fileExt)
