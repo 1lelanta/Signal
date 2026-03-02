@@ -7,6 +7,7 @@ const PostComposer = ({ onSubmit }) => {
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const { user } = useAuth();
 
   const handleImageChange = (e) => {
@@ -26,7 +27,8 @@ const PostComposer = ({ onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!content.trim()) return;
+    if (!content.trim() && !imageFile) return;
+    setError("");
 
     setLoading(true);
     try {
@@ -35,6 +37,7 @@ const PostComposer = ({ onSubmit }) => {
       clearImage();
     } catch (error) {
       console.error("Failed to create post", error);
+      setError(error?.response?.data?.message || error?.message || "Failed to create post");
     } finally {
       setLoading(false);
     }
@@ -60,6 +63,7 @@ const PostComposer = ({ onSubmit }) => {
           rows="3"
           disabled={loading}
         />
+        {error && <p className="mt-2 text-sm text-red-400">{error}</p>}
         {imagePreview && (
           <div className="mt-3 relative">
             <img
@@ -87,7 +91,7 @@ const PostComposer = ({ onSubmit }) => {
               disabled={loading}
             />
           </label>
-          <Button type="submit" disabled={loading || !content.trim()}>
+          <Button type="submit" disabled={loading || (!content.trim() && !imageFile)}>
             {loading ? "Posting..." : "Post"}
           </Button>
         </div>
