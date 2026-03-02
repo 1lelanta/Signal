@@ -26,6 +26,24 @@ export function usePosts(userId = null) {
 		fetchPosts();
 	}, [fetchPosts]);
 
+	const createPost = useCallback(async ({ title, content, tags = [] }) => {
+		const safeContent = (content || "").trim();
+		if (!safeContent) {
+			throw new Error("Post content is required");
+		}
+
+		const safeTitle = (title || safeContent.slice(0, 80)).trim();
+		const payload = {
+			title: safeTitle,
+			content: safeContent,
+			tags,
+		};
+
+		const res = await api.post("/posts", payload);
+		setPosts((prev) => [res.data, ...prev]);
+		return res.data;
+	}, []);
+
 	const getPostById = useCallback(
 		(id) => {
 			const found = posts.find((p) => p._id === id || p.id === id);
@@ -48,6 +66,6 @@ export function usePosts(userId = null) {
 		[posts]
 	);
 
-	return { posts, loading, getPostById, reload: fetchPosts };
+	return { posts, loading, getPostById, createPost, reload: fetchPosts };
 }
 
