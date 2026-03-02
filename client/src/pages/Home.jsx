@@ -2,7 +2,7 @@ import PostComposer from "../components/post/postComposer";
 import PostList from "../components/post/PostList";
 import { usePosts } from "../features/posts/usePosts";
 
-const Home = () => {
+export default function Home() {
   const { posts, loading, createPost } = usePosts();
 
   return (
@@ -20,6 +20,4 @@ const Home = () => {
 
     </div>
   );
-};
-
-export default Home;
+}
