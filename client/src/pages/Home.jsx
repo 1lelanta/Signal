@@ -6,7 +6,7 @@ const Home = () => {
   const { posts, loading, createPost } = usePosts();
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="w-full space-y-6">
 
       {/* Create Post */}
       <PostComposer onSubmit={createPost} />
