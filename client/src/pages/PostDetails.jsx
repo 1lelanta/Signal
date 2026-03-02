@@ -14,7 +14,7 @@ const PostDetails = () => {
   }
 
   return (
-    <div className="w-full space-y-6 xl:max-w-4xl xl:mx-auto 2xl:max-w-5xl">
+    <div className="w-full space-y-6 lg:max-w-4xl lg:mx-auto 2xl:max-w-5xl">
 
       <div className="bg-slate-900 p-4 rounded-xl">
         <h2 className="text-lg font-bold">{post.content}</h2>

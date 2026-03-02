@@ -18,6 +18,9 @@ const Layout = ({ children }) => {
             {children}
           </div>
         </main>
+
+        {/* Desktop spacer to keep center column truly centered in viewport */}
+        <div className="hidden md:block w-64 shrink-0" aria-hidden="true" />
       </div>
     </div>
   );
