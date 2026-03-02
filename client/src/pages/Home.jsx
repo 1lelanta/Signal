@@ -6,7 +6,7 @@ export default function Home() {
   const { posts, loading, createPost } = usePosts();
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-6 xl:max-w-4xl xl:mx-auto 2xl:max-w-5xl">
 
       {/* Create Post */}
       <PostComposer onSubmit={createPost} />
