@@ -1,15 +1,22 @@
 import Post from "../models/Post.model.js";
 import {calculateDepthScore} from "../utils/depthScore.js";
+import path from "path";
+import { ENV } from "../config/env.js";
+import supabase from "../config/supabase.js";
 
 export const createPost = async (req, res)=>{
     try {
-        const {title, content, tags} = req.body;
+        const {title, content, tags, imageUrl} = req.body;
+
+        const safeContent = (content || "").trim();
+        const safeTitle = (title || safeContent.slice(0, 80)).trim();
 
 
         const post = await Post.create({
             author: req.user.id,
-            title,
-            content,
+            title: safeTitle,
+            content: safeContent,
+            imageUrl: imageUrl || null,
             tags,
             reflectionExpiresAt: new Date(Date.now()+2*60*1000)// 2min
         });
@@ -18,6 +25,45 @@ export const createPost = async (req, res)=>{
         res.status(500).json({message: error.message})
     }
 }
+
+export const uploadPostImage = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: "Image file is required" });
+        }
+
+        if (!supabase || !ENV.SUPABASE_BUCKET) {
+            return res.status(500).json({
+                message: "Supabase storage is not configured",
+            });
+        }
+
+        const fileExt = path.extname(req.file.originalname || "").toLowerCase() || ".jpg";
+        const safeExt = [".jpg", ".jpeg", ".png", ".webp", ".gif"].includes(fileExt)
+            ? fileExt
+            : ".jpg";
+        const filePath = `posts/${req.user.id}/${Date.now()}-${Math.random().toString(36).slice(2)}${safeExt}`;
+
+        const { error: uploadError } = await supabase.storage
+            .from(ENV.SUPABASE_BUCKET)
+            .upload(filePath, req.file.buffer, {
+                contentType: req.file.mimetype,
+                upsert: false,
+            });
+
+        if (uploadError) {
+            return res.status(500).json({ message: uploadError.message });
+        }
+
+        const { data: publicData } = supabase.storage
+            .from(ENV.SUPABASE_BUCKET)
+            .getPublicUrl(filePath);
+
+        return res.status(201).json({ imageUrl: publicData.publicUrl });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
 
 export const publishPost = async (req,res)=>{
     try {
