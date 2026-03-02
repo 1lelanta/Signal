@@ -10,45 +10,47 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 z-50 bg-slate-900 border-b border-slate-800">
-      <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 flex items-center justify-between h-16 gap-3">
         
         <Link 
           to="/" 
-          className="text-xl font-semibold tracking-tight text-purple-400"
+          className="text-lg sm:text-xl font-semibold tracking-tight text-purple-400"
         >
           SIGNAL
         </Link>
 
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-2 sm:gap-4 min-w-0">
           
           {user ? (
             <>
               <Link
                 to="/profile"
-                className="text-sm text-slate-400 hover:text-purple-400 transition"
+                className="hidden sm:inline text-sm text-slate-400 hover:text-purple-400 transition"
               >
                 Profile
               </Link>
 
-              {user && <ReputationBadge score={score} />}
+              <div className="hidden md:block">
+                {user && <ReputationBadge score={score} />}
+              </div>
 
-              <button className="bg-purple-600 hover:bg-purple-700 px-4 py-1.5 rounded-md text-sm font-medium transition">
+              <button className="hidden md:inline-flex bg-purple-600 hover:bg-purple-700 px-3 py-1.5 rounded-md text-sm font-medium transition">
                 New Post
               </button>
 
               <button
                 onClick={logout}
-                className="text-sm text-slate-400 hover:text-red-400 ml-4"
+                className="text-xs sm:text-sm text-slate-400 hover:text-red-400 sm:ml-2"
               >
                 Logout
               </button>
             </>
           ) : (
             <>
-              <Link to="/login" className="text-sm text-slate-400 hover:text-purple-400 transition">
+              <Link to="/login" className="text-xs sm:text-sm text-slate-400 hover:text-purple-400 transition">
                 Login
               </Link>
-              <Link to="/register" className="text-sm text-slate-400 hover:text-purple-400 transition">
+              <Link to="/register" className="text-xs sm:text-sm text-slate-400 hover:text-purple-400 transition">
                 Register
               </Link>
             </>

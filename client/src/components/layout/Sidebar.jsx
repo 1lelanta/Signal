@@ -4,7 +4,7 @@ const linkBase = "block px-4 py-2 rounded-md text-sm transition";
 
 const Sidebar = () => {
   return (
-    <aside className="w-64 h-[calc(100vh-56px)] border-r border-slate-800 bg-slate-900 p-4">
+    <aside className="w-64 h-[calc(100vh-64px)] border-r border-slate-800 bg-slate-900 p-4">
       <nav className="space-y-2">
         
         <NavLink
