@@ -25,20 +25,20 @@ const PostComposer = ({ onSubmit }) => {
   if (!user) return null;
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 flex space-x-4 items-start">
+    <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 flex gap-2 sm:gap-4 items-start">
       <div className="flex-shrink-0">
         <img
-          className="h-10 w-10 rounded-full bg-slate-700"
+          className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-slate-700"
           src={`https://api.dicebear.com/6.x/initials/svg?seed=${user.username}`}
           alt={user.username}
         />
       </div>
-      <form onSubmit={handleSubmit} className="flex-1">
+      <form onSubmit={handleSubmit} className="flex-1 min-w-0">
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="What's happening?"
-          className="w-full bg-transparent text-slate-200 placeholder-slate-500 focus:outline-none resize-none text-lg"
+          className="w-full bg-transparent text-slate-200 placeholder-slate-500 focus:outline-none resize-none text-base sm:text-lg"
           rows="3"
           disabled={loading}
         />
