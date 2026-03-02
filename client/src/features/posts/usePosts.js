@@ -28,11 +28,11 @@ export function usePosts(userId = null) {
 
 	const createPost = useCallback(async ({ title, content, tags = [], imageFile = null }) => {
 		const safeContent = (content || "").trim();
-		if (!safeContent) {
-			throw new Error("Post content is required");
+		if (!safeContent && !imageFile) {
+			throw new Error("Post content or image is required");
 		}
 
-		const safeTitle = (title || safeContent.slice(0, 80)).trim();
+		const safeTitle = (title || safeContent.slice(0, 80) || "Image post").trim();
 		let imageUrl = null;
 
 		if (imageFile) {

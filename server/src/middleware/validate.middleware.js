@@ -1,9 +1,12 @@
 export const validatePostInput = (req, res, next) => {
-  const { title, content } = req.body;
+  const { content, imageUrl } = req.body;
 
-  if (!title || !content) {
+  const safeContent = String(content || "").trim();
+  const safeImageUrl = String(imageUrl || "").trim();
+
+  if (!safeContent && !safeImageUrl) {
     return res.status(400).json({
-      message: "Title and content are required",
+      message: "Post content or image is required",
     });
   }
 
