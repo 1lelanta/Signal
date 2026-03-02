@@ -10,28 +10,29 @@ const CommentItem = ({
     depth = 0,
 })=>{
     const [showReply, setShowReply] = useState(false);
+    const nestedOffset = Math.min(depth, 4) * 12;
 
     return(
-        <div className={`mt-3 p-3 rounded-xl border-1-4 ${depthColor(depth)}`}
-        style={{marginLeft: depth*16}}>
+        <div className={`mt-3 p-3 rounded-xl border ${depthColor(depth)} w-full`}
+        style={{marginLeft: nestedOffset}}>
 
-            <div className="flex justify-between items-center">
-                <div>
+            <div className="flex justify-between items-start sm:items-center gap-2">
+                <div className="min-w-0">
                     <p className="text-sm font-semibold">
                         {comment.author?.username}
                     </p>
-                    <p>
+                    <p className="text-xs text-slate-400">
                         {formatDate(comment.createdAt)}
                     </p>
                 </div>
                 <button onClick={()=>removeComment(comment._id)}
-                    className="text-xs text-red-400">
+                    className="text-xs text-red-400 shrink-0">
                         Delete
 
                 </button>
 
             </div>
-            <p className="mt-2 text-sm">{comment.text}</p>
+            <p className="mt-2 text-sm break-words">{comment.text}</p>
             <button onClick={()=>setShowReply(!showReply)}
                 className="text-xs text-blue-400 mt-2">
                     reply
