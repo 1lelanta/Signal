@@ -26,7 +26,7 @@ const PostComposer = ({ onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!content.trim() && !imageFile) return;
+    if (!content.trim()) return;
 
     setLoading(true);
     try {

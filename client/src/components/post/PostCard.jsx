@@ -22,6 +22,13 @@ const PostCard = ({post})=>{
             <p className="text-slate-200 leading-relaxed text-sm mb-4 break-words">
                 {post.content}
             </p>
+            {post.imageUrl && (
+                <img
+                    src={post.imageUrl}
+                    alt="Post"
+                    className="w-full max-h-96 object-cover rounded-lg border border-slate-700 mb-4"
+                />
+            )}
             </Link>
 
             {/* Footer */}

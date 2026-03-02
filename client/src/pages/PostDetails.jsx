@@ -18,6 +18,13 @@ const PostDetails = () => {
 
       <div className="bg-slate-900 p-4 rounded-xl">
         <h2 className="text-lg font-bold">{post.content}</h2>
+        {post.imageUrl && (
+          <img
+            src={post.imageUrl}
+            alt="Post"
+            className="mt-4 w-full max-h-[32rem] object-cover rounded-lg border border-slate-700"
+          />
+        )}
       </div>
 
       <CommentInput postId={postId} />
