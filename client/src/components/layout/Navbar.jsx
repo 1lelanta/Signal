@@ -34,9 +34,12 @@ const Navbar = () => {
                 {user && <ReputationBadge score={score} />}
               </div>
 
-              <button className="hidden md:inline-flex bg-purple-600 hover:bg-purple-700 px-3 py-1.5 rounded-md text-sm font-medium transition">
+              <Link
+                to="/"
+                className="hidden md:inline-flex bg-purple-600 hover:bg-purple-700 px-3 py-1.5 rounded-md text-sm font-medium transition"
+              >
                 New Post
-              </button>
+              </Link>
 
               <button
                 onClick={logout}
