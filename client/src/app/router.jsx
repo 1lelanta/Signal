@@ -7,7 +7,7 @@ import Register from "../pages/Register";
 import Profile from "../pages/Profile";
 import PostDetails from "../pages/PostDetails";
 import NotFound from "../pages/NotFound";
-import Layout from "../components/layout/Layout";
+import Layout from "../components/layout/layout";
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
