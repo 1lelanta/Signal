@@ -4,17 +4,35 @@ import Button from "../ui/Button";
 
 const PostComposer = ({ onSubmit }) => {
   const [content, setContent] = useState("");
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState("");
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
 
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0] || null;
+    setImageFile(file);
+    if (file) {
+      setImagePreview(URL.createObjectURL(file));
+    } else {
+      setImagePreview("");
+    }
+  };
+
+  const clearImage = () => {
+    setImageFile(null);
+    setImagePreview("");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!content.trim()) return;
+    if (!content.trim() && !imageFile) return;
 
     setLoading(true);
     try {
-      await onSubmit({ content });
+      await onSubmit({ content, imageFile });
       setContent("");
+      clearImage();
     } catch (error) {
       console.error("Failed to create post", error);
     } finally {
@@ -42,7 +60,33 @@ const PostComposer = ({ onSubmit }) => {
           rows="3"
           disabled={loading}
         />
+        {imagePreview && (
+          <div className="mt-3 relative">
+            <img
+              src={imagePreview}
+              alt="Selected preview"
+              className="max-h-64 w-full object-cover rounded-lg border border-slate-700"
+            />
+            <button
+              type="button"
+              onClick={clearImage}
+              className="absolute top-2 right-2 text-xs bg-slate-900/80 hover:bg-slate-900 text-slate-100 px-2 py-1 rounded"
+            >
+              Remove
+            </button>
+          </div>
+        )}
         <div className="flex justify-end mt-2">
+          <label className="mr-2 inline-flex items-center px-3 py-2 rounded-md text-sm font-medium transition bg-slate-800 hover:bg-slate-700 text-slate-200 cursor-pointer">
+            Add Image
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="hidden"
+              disabled={loading}
+            />
+          </label>
           <Button type="submit" disabled={loading || !content.trim()}>
             {loading ? "Posting..." : "Post"}
           </Button>

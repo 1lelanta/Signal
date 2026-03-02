@@ -26,17 +26,29 @@ export function usePosts(userId = null) {
 		fetchPosts();
 	}, [fetchPosts]);
 
-	const createPost = useCallback(async ({ title, content, tags = [] }) => {
+	const createPost = useCallback(async ({ title, content, tags = [], imageFile = null }) => {
 		const safeContent = (content || "").trim();
 		if (!safeContent) {
 			throw new Error("Post content is required");
 		}
 
 		const safeTitle = (title || safeContent.slice(0, 80)).trim();
+		let imageUrl = null;
+
+		if (imageFile) {
+			const formData = new FormData();
+			formData.append("image", imageFile);
+			const uploadRes = await api.post("/posts/upload-image", formData, {
+				headers: { "Content-Type": "multipart/form-data" },
+			});
+			imageUrl = uploadRes.data?.imageUrl || null;
+		}
+
 		const payload = {
 			title: safeTitle,
 			content: safeContent,
 			tags,
+			imageUrl,
 		};
 
 		const res = await api.post("/posts", payload);
