@@ -1,7 +1,7 @@
 import User from "../models/User.model.js";
 import path from "path";
 import { ENV } from "../config/env.js";
-import supabase from "../config/supabase.js";
+import supabase, { ensureBucketExists } from "../config/supabase.js";
 
 export const getUserProfile = async(req, res)=>{
     try {
@@ -96,6 +96,8 @@ export const uploadUserAvatar = async (req, res) => {
         if (!supabase || !ENV.SUPABASE_BUCKET) {
             return res.status(500).json({ message: "Supabase storage is not configured" });
         }
+
+        await ensureBucketExists(ENV.SUPABASE_BUCKET);
 
         const fileExt = path.extname(req.file.originalname || "").toLowerCase() || ".jpg";
         const safeExt = [".jpg", ".jpeg", ".png", ".webp", ".gif"].includes(fileExt)
