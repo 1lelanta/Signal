@@ -12,10 +12,25 @@ export const addComment = async(req,res)=>{
             type,
         })
 
-        res.status(201).json(comment);
+        const populatedComment = await Comment.findById(comment._id)
+            .populate("author", "username");
+
+        res.status(201).json(populatedComment);
 
     } catch (error) {
         res.status(500).json({message: error.message})
         
     }
 }
+
+export const getCommentsByPost = async (req, res) => {
+    try {
+        const comments = await Comment.find({ post: req.params.postId })
+            .sort({ createdAt: -1 })
+            .populate("author", "username");
+
+        res.json(comments);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
