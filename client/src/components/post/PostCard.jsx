@@ -14,11 +14,17 @@ const PostCard = ({post})=>{
     const { user } = useAuth();
     const userId = user?._id || user?.id;
     const initialLikes = Array.isArray(post?.likes) ? post.likes : [];
+    const initialReposts = Array.isArray(post?.reposts) ? post.reposts : [];
     const [liked, setLiked] = useState(
         !!userId && initialLikes.some((id) => String(id) === String(userId))
     );
     const [likesCount, setLikesCount] = useState(initialLikes.length);
     const [liking, setLiking] = useState(false);
+    const [reposted, setReposted] = useState(
+        !!userId && initialReposts.some((id) => String(id) === String(userId))
+    );
+    const [repostsCount, setRepostsCount] = useState(initialReposts.length);
+    const [reposting, setReposting] = useState(false);
     const [showCommentInput, setShowCommentInput] = useState(false);
     const [commentText, setCommentText] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -66,6 +72,24 @@ const PostCard = ({post})=>{
             setCommentMessage(err?.response?.data?.message || "Failed to update like");
         } finally {
             setLiking(false);
+        }
+    };
+
+    const handleRepostToggle = async () => {
+        if (!userId) {
+            setCommentMessage("Please log in to repost.");
+            return;
+        }
+
+        try {
+            setReposting(true);
+            const res = await api.post(`/posts/${post._id}/repost`);
+            setReposted(!!res.data?.reposted);
+            setRepostsCount(Number(res.data?.repostsCount || 0));
+        } catch (err) {
+            setCommentMessage(err?.response?.data?.message || "Failed to repost");
+        } finally {
+            setReposting(false);
         }
     };
 
@@ -228,6 +252,17 @@ const PostCard = ({post})=>{
                         title="Like"
                     >
                         {liking ? "..." : "Like"} {likesCount}
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={handleRepostToggle}
+                        disabled={reposting}
+                        className={`text-sm font-medium transition ${reposted ? "text-green-400" : "text-slate-300 hover:text-green-400"}`}
+                        aria-label="Repost"
+                        title="Repost"
+                    >
+                        {reposting ? "..." : "Repost"} {repostsCount}
                     </button>
 
                     <button
