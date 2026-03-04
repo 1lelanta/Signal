@@ -6,6 +6,8 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Profile from "../pages/Profile";
 import PostDetails from "../pages/PostDetails";
+import Notifications from "../pages/Notifications";
+import Reputation from "../pages/Reputation";
 import NotFound from "../pages/NotFound";
 import Layout from "../components/layout/layout";
 
@@ -48,6 +50,28 @@ const Router = () => {
             <ProtectedRoute>
               <Layout>
                 <PostDetails />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/notifications"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Notifications />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/reputation"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Reputation />
               </Layout>
             </ProtectedRoute>
           }
