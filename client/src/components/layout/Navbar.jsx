@@ -3,10 +3,30 @@ import { useAuth } from "../../features/auth/useAuth";
 import { useReputation } from "../../features/reputation/useReputation";
 import ReputationBadge from "../reputation/ReputationBadge";
 
+const getUserInitials = (user) => {
+  const fullName =
+    user?.name ||
+    [user?.firstName, user?.lastName].filter(Boolean).join(" ") ||
+    user?.username ||
+    "U";
+
+  const parts = String(fullName)
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+
+  if (parts.length >= 2) {
+    return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+  }
+
+  return parts[0]?.slice(0, 2).toUpperCase() || "U";
+};
+
 const Navbar = () => {
   const { user } = useAuth();
   const { score } = useReputation(user?._id);
   const { logout } = useAuth();
+  const initials = getUserInitials(user);
 
   return (
     <nav className="sticky top-0 z-50 bg-slate-900 border-b border-slate-800">
@@ -25,9 +45,19 @@ const Navbar = () => {
             <>
               <Link
                 to="/profile"
-                className="hidden sm:inline text-sm text-slate-400 hover:text-purple-400 transition"
+                className="hidden sm:inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-700 overflow-hidden bg-slate-800 text-xs font-semibold text-slate-200 hover:border-purple-500 transition"
+                aria-label="Profile"
+                title="Profile"
               >
-                Profile
+                {user?.avatar ? (
+                  <img
+                    src={user.avatar}
+                    alt={user?.username || "User"}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  initials
+                )}
               </Link>
 
               <div className="hidden md:block">
