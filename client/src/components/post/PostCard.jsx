@@ -74,7 +74,7 @@ const PostCard = ({post})=>{
                         <div className="flex items-center justify-between gap-2">
                             <span className="text-xs text-slate-400">Share your thoughts on this post</span>
                             <Button type="submit" disabled={isSubmitting || !commentText.trim()} className="!bg-blue-600 hover:!bg-blue-700 !text-white border-0">
-                                {isSubmitting ? "Posting..." : "Comment"}
+                                {isSubmitting ? "⏳" : "💬"}
                             </Button>
                         </div>
                     </form>
