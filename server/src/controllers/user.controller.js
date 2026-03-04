@@ -2,6 +2,7 @@ import User from "../models/User.model.js";
 import path from "path";
 import { ENV } from "../config/env.js";
 import supabase, { ensureBucketExists } from "../config/supabase.js";
+import { createNotificationService } from "../services/notification.service.js";
 
 export const getUserProfile = async(req, res)=>{
     try {
@@ -161,6 +162,15 @@ export const toggleFollowUser = async (req, res) => {
         }
 
         await Promise.all([currentUser.save(), targetUser.save()]);
+
+        if (!isFollowing) {
+            await createNotificationService({
+                recipient: targetUser._id,
+                actor: currentUser._id,
+                type: "follow",
+                message: `${currentUser.username} followed you. Follow back?`,
+            });
+        }
 
         const followsYou = targetUser.following.some(
             (id) => String(id) === String(currentUserId)
