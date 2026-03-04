@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import DepthScoreBadge from "./DepthScoreBadge";
 import Button from "../ui/Button";
 import api from "../../services/axios";
 import { useAuth } from "../../features/auth/useAuth";
@@ -160,8 +159,6 @@ const PostCard = ({post})=>{
                     Reputation {post.author.reputationScore}
                 </p>
             </div>
-            <DepthScoreBadge score={post.depthScore}/>
-
             {/* content */}
 
             <Link to={`/post/${post._id}`}>
