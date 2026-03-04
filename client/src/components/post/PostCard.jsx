@@ -242,7 +242,7 @@ const PostCard = ({post})=>{
             </Link>
 
             <div className="mt-3 border-t border-slate-800 pt-3">
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-6 sm:gap-8">
                     <button
                         type="button"
                         onClick={handleLikeToggle}
