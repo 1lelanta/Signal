@@ -13,6 +13,7 @@ const Messages = () => {
   const myId = user?._id || user?.id;
 
   const [users, setUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [activeUserId, setActiveUserId] = useState(null);
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
@@ -24,6 +25,14 @@ const Messages = () => {
     () => users.find((u) => String(u._id) === String(activeUserId)),
     [users, activeUserId]
   );
+
+  const filteredUsers = useMemo(() => {
+    const q = searchTerm.trim().toLowerCase();
+    if (!q) return users;
+    return users.filter((u) =>
+      String(u.username || "").toLowerCase().includes(q)
+    );
+  }, [users, searchTerm]);
 
   useEffect(() => {
     const loadUsers = async () => {
@@ -101,11 +110,17 @@ const Messages = () => {
       <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden grid grid-cols-1 md:grid-cols-[260px_1fr] min-h-[65vh]">
         <aside className="border-r border-slate-800 p-3">
           <h2 className="text-sm font-semibold text-slate-200 mb-3">Messages</h2>
+          <input
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search users..."
+            className="w-full mb-3 bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+          />
           {loadingUsers ? (
             <p className="text-xs text-slate-400">Loading users...</p>
-          ) : users.length ? (
+          ) : filteredUsers.length ? (
             <div className="space-y-1">
-              {users.map((u) => (
+              {filteredUsers.map((u) => (
                 <button
                   key={u._id}
                   type="button"
@@ -120,6 +135,8 @@ const Messages = () => {
                 </button>
               ))}
             </div>
+          ) : users.length ? (
+            <p className="text-xs text-slate-400">No users match your search.</p>
           ) : (
             <p className="text-xs text-slate-400">No users found.</p>
           )}
