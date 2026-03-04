@@ -12,6 +12,13 @@ const getInitials = (name = "User") => {
 
 const PostCard = ({post})=>{
     const { user } = useAuth();
+    const userId = user?._id || user?.id;
+    const initialLikes = Array.isArray(post?.likes) ? post.likes : [];
+    const [liked, setLiked] = useState(
+        !!userId && initialLikes.some((id) => String(id) === String(userId))
+    );
+    const [likesCount, setLikesCount] = useState(initialLikes.length);
+    const [liking, setLiking] = useState(false);
     const [showCommentInput, setShowCommentInput] = useState(false);
     const [commentText, setCommentText] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -41,6 +48,24 @@ const PostCard = ({post})=>{
         setShowCommentInput(next);
         if (next && !commentsLoaded) {
             await fetchComments();
+        }
+    };
+
+    const handleLikeToggle = async () => {
+        if (!userId) {
+            setCommentMessage("Please log in to like posts.");
+            return;
+        }
+
+        try {
+            setLiking(true);
+            const res = await api.post(`/posts/${post._id}/like`);
+            setLiked(!!res.data?.liked);
+            setLikesCount(Number(res.data?.likesCount || 0));
+        } catch (err) {
+            setCommentMessage(err?.response?.data?.message || "Failed to update like");
+        } finally {
+            setLiking(false);
         }
     };
 
@@ -193,15 +218,28 @@ const PostCard = ({post})=>{
             </Link>
 
             <div className="mt-3 border-t border-slate-800 pt-3">
-                <button
-                    type="button"
-                    onClick={toggleComments}
-                    className="text-sm text-slate-300 hover:text-purple-400 font-medium"
-                    aria-label="Toggle comment input"
-                    title="Comment"
-                >
-                    Comment
-                </button>
+                <div className="flex items-center gap-4">
+                    <button
+                        type="button"
+                        onClick={handleLikeToggle}
+                        disabled={liking}
+                        className={`text-sm font-medium transition ${liked ? "text-blue-400" : "text-slate-300 hover:text-blue-400"}`}
+                        aria-label="Like post"
+                        title="Like"
+                    >
+                        {liking ? "..." : "Like"} {likesCount}
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={toggleComments}
+                        className="text-sm text-slate-300 hover:text-purple-400 font-medium"
+                        aria-label="Toggle comment input"
+                        title="Comment"
+                    >
+                        Comment
+                    </button>
+                </div>
 
                 {showCommentInput && (
                     user ? (

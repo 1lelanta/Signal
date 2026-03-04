@@ -109,3 +109,31 @@ export const getSinglePost = async(req,res)=>{
         
     }
 }
+
+export const toggleLikePost = async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id);
+        if (!post) {
+            return res.status(404).json({ message: "Post not found" });
+        }
+
+        const userId = String(req.user.id);
+        const hasLiked = post.likes.some((id) => String(id) === userId);
+
+        if (hasLiked) {
+            post.likes = post.likes.filter((id) => String(id) !== userId);
+        } else {
+            post.likes.push(req.user.id);
+        }
+
+        await post.save();
+
+        return res.json({
+            success: true,
+            liked: !hasLiked,
+            likesCount: post.likes.length,
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};

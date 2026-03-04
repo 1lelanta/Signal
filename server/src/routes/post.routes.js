@@ -5,6 +5,7 @@ import {
     publishPost,
     getSinglePost,
     uploadPostImage,
+    toggleLikePost,
 } from "../controllers/post.controller.js";
 
 import { protect } from "../middleware/auth.middleware.js";
@@ -28,6 +29,7 @@ router.post("/", protect, validatePostInput, createPost);
 router.post("/upload-image", protect, upload.single("image"), uploadPostImage);
 
 router.put("/:id/publish", protect, publishPost);
+router.post("/:id/like", protect, toggleLikePost);
 
 router.get("/:id", protect, getSinglePost)
 
