@@ -27,6 +27,9 @@ const Navbar = () => {
   const { score } = useReputation(user?._id);
   const { logout } = useAuth();
   const initials = getUserInitials(user);
+  const handleGoHome = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <nav className="sticky top-0 z-50 bg-slate-900 border-b border-slate-800">
@@ -43,6 +46,16 @@ const Navbar = () => {
           
           {user ? (
             <>
+              <Link
+                to="/"
+                onClick={handleGoHome}
+                className="text-xs sm:text-sm font-medium text-slate-300 hover:text-purple-400 transition"
+                aria-label="Home"
+                title="Home"
+              >
+                🏠 Home
+              </Link>
+
               <Link
                 to="/profile"
                 className="hidden sm:inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-700 overflow-hidden bg-slate-800 text-xs font-semibold text-slate-200 hover:border-purple-500 transition"
@@ -89,6 +102,9 @@ const Navbar = () => {
             </>
           ) : (
             <>
+              <Link to="/" onClick={handleGoHome} className="text-xs sm:text-sm font-medium text-slate-300 hover:text-purple-400 transition">
+                🏠 Home
+              </Link>
               <Link to="/login" className="text-xs sm:text-sm font-medium text-slate-300 hover:text-purple-400 transition">
                 Login
               </Link>
