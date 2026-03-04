@@ -13,13 +13,22 @@ const CommentInput = ({onSubmit, parentId = null})=>{
     };
 
     return(
-        <form onSubmit={handleSubmit} className="flex gap-2 mt-2">
-            <Input 
-            value={text}
-            onChange={(e)=>setText(e.target.value)}
-            placeholder="Write a comment..."
-            />
-            <Button type="submit" aria-label="Submit comment">Post</Button>
+        <form onSubmit={handleSubmit} className="mt-2">
+            <div className="relative">
+                <Input 
+                value={text}
+                onChange={(e)=>setText(e.target.value)}
+                placeholder="Write a comment..."
+                className="pr-20"
+                />
+                <Button
+                    type="submit"
+                    aria-label="Submit comment"
+                    className="!bg-blue-600 hover:!bg-blue-700 !text-white border-0 !px-3 !py-1.5 absolute right-1 top-1/2 -translate-y-1/2"
+                >
+                    Post
+                </Button>
+            </div>
 
         </form>
     )

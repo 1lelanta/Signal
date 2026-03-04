@@ -75,22 +75,24 @@ const PostCard = ({post})=>{
 
                 {showCommentInput && (
                     user ? (
-                        <form onSubmit={handleCommentSubmit} className="mt-2 flex items-center gap-2">
-                            <input
-                                type="text"
-                                value={commentText}
-                                onChange={(e) => setCommentText(e.target.value)}
-                                placeholder="Write a comment..."
-                                className="flex-1 bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                            />
-                            <Button
-                                type="submit"
-                                disabled={isSubmitting || !commentText.trim()}
-                                className="!bg-blue-600 hover:!bg-blue-700 !text-white border-0"
-                                aria-label="Submit comment"
-                            >
-                                {isSubmitting ? "Posting..." : "Post"}
-                            </Button>
+                        <form onSubmit={handleCommentSubmit} className="mt-2">
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    value={commentText}
+                                    onChange={(e) => setCommentText(e.target.value)}
+                                    placeholder="Write a comment..."
+                                    className="w-full bg-slate-800 border border-slate-700 rounded-md px-3 pr-20 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                />
+                                <Button
+                                    type="submit"
+                                    disabled={isSubmitting || !commentText.trim()}
+                                    className="!bg-blue-600 hover:!bg-blue-700 !text-white border-0 !px-3 !py-1.5 absolute right-1 top-1/2 -translate-y-1/2"
+                                    aria-label="Submit comment"
+                                >
+                                    {isSubmitting ? "..." : "Post"}
+                                </Button>
+                            </div>
                         </form>
                     ) : (
                         <p className="text-xs text-slate-400 mt-2">Log in to comment on this post.</p>
