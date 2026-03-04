@@ -7,6 +7,7 @@ import { useAuth } from "../../features/auth/useAuth";
 
 const PostCard = ({post})=>{
     const { user } = useAuth();
+    const [showCommentInput, setShowCommentInput] = useState(false);
     const [commentText, setCommentText] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [commentMessage, setCommentMessage] = useState("");
@@ -62,24 +63,38 @@ const PostCard = ({post})=>{
             </Link>
 
             <div className="mt-3 border-t border-slate-800 pt-3">
-                {user ? (
-                    <form onSubmit={handleCommentSubmit} className="space-y-2">
-                        <input
-                            type="text"
-                            value={commentText}
-                            onChange={(e) => setCommentText(e.target.value)}
-                            placeholder="Write a comment..."
-                            className="w-full bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        />
-                        <div className="flex items-center justify-between gap-2">
-                            <span className="text-xs text-slate-400">Share your thoughts on this post</span>
-                            <Button type="submit" disabled={isSubmitting || !commentText.trim()} className="!bg-blue-600 hover:!bg-blue-700 !text-white border-0">
+                <button
+                    type="button"
+                    onClick={() => setShowCommentInput((prev) => !prev)}
+                    className="text-lg leading-none"
+                    aria-label="Toggle comment input"
+                    title="Comment"
+                >
+                    💬
+                </button>
+
+                {showCommentInput && (
+                    user ? (
+                        <form onSubmit={handleCommentSubmit} className="mt-2 flex items-center gap-2">
+                            <input
+                                type="text"
+                                value={commentText}
+                                onChange={(e) => setCommentText(e.target.value)}
+                                placeholder="Write a comment..."
+                                className="flex-1 bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            />
+                            <Button
+                                type="submit"
+                                disabled={isSubmitting || !commentText.trim()}
+                                className="!bg-blue-600 hover:!bg-blue-700 !text-white border-0"
+                                aria-label="Submit comment"
+                            >
                                 {isSubmitting ? "⏳" : "💬"}
                             </Button>
-                        </div>
-                    </form>
-                ) : (
-                    <p className="text-xs text-slate-400">Log in to comment on this post.</p>
+                        </form>
+                    ) : (
+                        <p className="text-xs text-slate-400 mt-2">Log in to comment on this post.</p>
+                    )
                 )}
                 {commentMessage && <p className="text-xs text-slate-300 mt-2">{commentMessage}</p>}
             </div>
