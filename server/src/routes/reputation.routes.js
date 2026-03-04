@@ -28,7 +28,7 @@ router.post(
 router.get("/:userId", async (req, res) => {
     try {
         const data = await getReputation(req.params.userId);
-        return res.json({ success: true, score: data.score });
+        return res.json({ success: true, ...data });
     } catch (err) {
         return res.status(404).json({ success: false, message: err.message || 'Not found' });
     }
