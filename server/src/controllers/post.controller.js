@@ -98,7 +98,7 @@ export const publishPost = async (req,res)=>{
 export const getSinglePost = async(req,res)=>{
     try {
         const post = await Post.findById(req.params.id)
-        .populate("author", "username reputationScore")
+        .populate("author", "username reputationScore avatar")
         .populate("comments")
 
         if(!post) return res.status(404).json({message: "Post not found"})

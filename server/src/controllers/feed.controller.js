@@ -4,7 +4,7 @@ export const getFeed = async(req, res)=>{
     try {
         const posts = await Post.find({isPublished:true})
         .sort({depthScore:-1})
-        .populate("author", "username reputationScore");
+        .populate("author", "username reputationScore avatar");
 
         res.json(posts);
 
