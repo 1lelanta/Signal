@@ -15,3 +15,13 @@ export const uploadAvatar = async (file) => {
 
   return res.data;
 };
+
+export const getFollowStatus = async (userId) => {
+  const res = await api.get(`/users/${userId}/follow-status`);
+  return res.data;
+};
+
+export const toggleFollowUser = async (userId) => {
+  const res = await api.post(`/users/${userId}/follow`);
+  return res.data;
+};

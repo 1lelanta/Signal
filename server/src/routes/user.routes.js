@@ -4,6 +4,8 @@ import {
     getUserProfile,
     updateUserProfile,
     uploadUserAvatar,
+    toggleFollowUser,
+    getFollowStatus,
 } from "../controllers/user.controller.js";
 
 import {protect} from "../middleware/auth.middleware.js";
@@ -22,9 +24,11 @@ const upload = multer({
     },
 });
 
-router.get("/:id", protect, getUserProfile);
 router.put("/profile", protect, updateUserProfile);
 router.post("/upload-avatar", protect, upload.single("avatar"), uploadUserAvatar);
+router.get("/:id/follow-status", protect, getFollowStatus);
+router.post("/:id/follow", protect, toggleFollowUser);
+router.get("/:id", protect, getUserProfile);
 
 export default router;
 

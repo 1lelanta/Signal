@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "../ui/Button";
 import api from "../../services/axios";
 import { useAuth } from "../../features/auth/useAuth";
+import { getFollowStatus, toggleFollowUser } from "../../features/users/profileAPI";
 
 const getInitials = (name = "User") => {
     const parts = String(name).trim().split(/\s+/).filter(Boolean);
@@ -13,6 +14,7 @@ const getInitials = (name = "User") => {
 const PostCard = ({post})=>{
     const { user } = useAuth();
     const userId = user?._id || user?.id;
+    const authorId = post.author?._id;
     const initialLikes = Array.isArray(post?.likes) ? post.likes : [];
     const initialReposts = Array.isArray(post?.reposts) ? post.reposts : [];
     const [liked, setLiked] = useState(
@@ -25,6 +27,9 @@ const PostCard = ({post})=>{
     );
     const [repostsCount, setRepostsCount] = useState(initialReposts.length);
     const [reposting, setReposting] = useState(false);
+    const [followingAuthor, setFollowingAuthor] = useState(false);
+    const [authorFollowsYou, setAuthorFollowsYou] = useState(false);
+    const [followLoading, setFollowLoading] = useState(false);
     const [showCommentInput, setShowCommentInput] = useState(false);
     const [commentText, setCommentText] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -35,6 +40,25 @@ const PostCard = ({post})=>{
     const [commentsLoaded, setCommentsLoaded] = useState(false);
     const [activeReplyId, setActiveReplyId] = useState(null);
     const [replyText, setReplyText] = useState("");
+
+    const loadFollowStatus = async () => {
+        if (!userId || !authorId || String(userId) === String(authorId)) {
+            return;
+        }
+
+        try {
+            const data = await getFollowStatus(authorId);
+            setFollowingAuthor(!!data?.following);
+            setAuthorFollowsYou(!!data?.followsYou);
+        } catch (err) {
+            setFollowingAuthor(false);
+            setAuthorFollowsYou(false);
+        }
+    };
+
+    useEffect(() => {
+        loadFollowStatus();
+    }, [userId, authorId]);
 
     const fetchComments = async () => {
         try {
@@ -90,6 +114,21 @@ const PostCard = ({post})=>{
             setCommentMessage(err?.response?.data?.message || "Failed to repost");
         } finally {
             setReposting(false);
+        }
+    };
+
+    const handleFollowToggle = async () => {
+        if (!userId || !authorId || String(userId) === String(authorId)) return;
+
+        try {
+            setFollowLoading(true);
+            const data = await toggleFollowUser(authorId);
+            setFollowingAuthor(!!data?.following);
+            setAuthorFollowsYou(!!data?.followsYou);
+        } catch (err) {
+            setCommentMessage(err?.response?.data?.message || "Failed to update follow");
+        } finally {
+            setFollowLoading(false);
         }
     };
 
@@ -226,6 +265,28 @@ const PostCard = ({post})=>{
                     Reputation {post.author.reputationScore}
                 </p>
             </div>
+
+            {!!userId && String(userId) !== String(authorId) && (
+                <div className="mb-3">
+                    <button
+                        type="button"
+                        onClick={handleFollowToggle}
+                        disabled={followLoading}
+                        className={`text-xs font-medium px-2.5 py-1 rounded-md border transition ${followingAuthor
+                            ? "border-slate-600 text-slate-300 hover:border-slate-500"
+                            : "border-purple-500 text-purple-300 hover:bg-purple-500/10"
+                        }`}
+                    >
+                        {followLoading
+                            ? "..."
+                            : followingAuthor
+                                ? "Following"
+                                : authorFollowsYou
+                                    ? "Follow back"
+                                    : "Follow"}
+                    </button>
+                </div>
+            )}
             {/* content */}
 
             <Link to={`/post/${post._id}`}>
