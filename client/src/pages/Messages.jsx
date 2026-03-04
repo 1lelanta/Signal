@@ -6,6 +6,7 @@ import {
   getMessageUsers,
   getUnreadMessagesCount,
   sendPrivateMessage,
+  uploadMessageImage,
 } from "../features/messages/messagesAPI";
 
 const Messages = () => {
@@ -17,6 +18,7 @@ const Messages = () => {
   const [activeUserId, setActiveUserId] = useState(null);
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
+  const [imageFile, setImageFile] = useState(null);
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [sending, setSending] = useState(false);
@@ -93,13 +95,23 @@ const Messages = () => {
   const handleSend = async (e) => {
     e.preventDefault();
     const message = text.trim();
-    if (!message || !activeUserId) return;
+    if ((!message && !imageFile) || !activeUserId) return;
 
     try {
       setSending(true);
-      const newMessage = await sendPrivateMessage(activeUserId, message);
+      let imageUrl = null;
+      if (imageFile) {
+        const uploaded = await uploadMessageImage(imageFile);
+        imageUrl = uploaded?.imageUrl || null;
+      }
+
+      const newMessage = await sendPrivateMessage(activeUserId, {
+        text: message,
+        imageUrl,
+      });
       setMessages((prev) => [...prev, newMessage]);
       setText("");
+      setImageFile(null);
     } finally {
       setSending(false);
     }
@@ -162,7 +174,14 @@ const Messages = () => {
                         : "mr-auto bg-slate-800 text-slate-200 border border-slate-700"
                     }`}
                   >
-                    {m.text}
+                    {m.text ? <p>{m.text}</p> : null}
+                    {m.imageUrl ? (
+                      <img
+                        src={m.imageUrl}
+                        alt="message"
+                        className="mt-2 max-w-full rounded-md border border-slate-700"
+                      />
+                    ) : null}
                   </div>
                 );
               })
@@ -178,16 +197,29 @@ const Messages = () => {
                 onChange={(e) => setText(e.target.value)}
                 placeholder={activeUser ? "Type a private message..." : "Select a user first"}
                 disabled={!activeUserId || sending}
-                className="w-full bg-slate-800 border border-slate-700 rounded-md px-3 pr-20 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50"
+                className="w-full bg-slate-800 border border-slate-700 rounded-md px-3 pr-36 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50"
               />
+              <label className="absolute right-16 top-1/2 -translate-y-1/2 px-2 py-1 rounded-md text-xs font-medium border border-slate-600 text-slate-300 hover:border-slate-500 cursor-pointer">
+                📷
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  disabled={!activeUserId || sending}
+                  onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+                />
+              </label>
               <button
                 type="submit"
-                disabled={!activeUserId || sending || !text.trim()}
+                disabled={!activeUserId || sending || (!text.trim() && !imageFile)}
                 className="absolute right-1 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-md text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
               >
                 {sending ? "..." : "Send"}
               </button>
             </div>
+            {imageFile && (
+              <p className="mt-2 text-xs text-slate-400">Attached: {imageFile.name}</p>
+            )}
           </form>
         </section>
       </div>
