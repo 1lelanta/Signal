@@ -6,6 +6,7 @@ import {
     getSinglePost,
     uploadPostImage,
     toggleLikePost,
+    toggleRepostPost,
 } from "../controllers/post.controller.js";
 
 import { protect } from "../middleware/auth.middleware.js";
@@ -30,6 +31,7 @@ router.post("/upload-image", protect, upload.single("image"), uploadPostImage);
 
 router.put("/:id/publish", protect, publishPost);
 router.post("/:id/like", protect, toggleLikePost);
+router.post("/:id/repost", protect, toggleRepostPost);
 
 router.get("/:id", protect, getSinglePost)
 

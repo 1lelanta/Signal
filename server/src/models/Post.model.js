@@ -27,6 +27,12 @@ const postSchema = new mongoose.Schema({
             ref: "User",
         }
     ],
+    reposts: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+        }
+    ],
     tags:[
         {
             type:String,

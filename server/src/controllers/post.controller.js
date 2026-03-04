@@ -137,3 +137,31 @@ export const toggleLikePost = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 };
+
+export const toggleRepostPost = async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id);
+        if (!post) {
+            return res.status(404).json({ message: "Post not found" });
+        }
+
+        const userId = String(req.user.id);
+        const hasReposted = post.reposts.some((id) => String(id) === userId);
+
+        if (hasReposted) {
+            post.reposts = post.reposts.filter((id) => String(id) !== userId);
+        } else {
+            post.reposts.push(req.user.id);
+        }
+
+        await post.save();
+
+        return res.json({
+            success: true,
+            reposted: !hasReposted,
+            repostsCount: post.reposts.length,
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
