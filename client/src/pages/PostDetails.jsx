@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
 import { usePosts } from "../features/posts/usePosts";
 import CommentTree from "../components/comment/CommentTree";
-import CommentInput from "../components/comment/CommentInput";
 
 const PostDetails = () => {
   const { postId } = useParams();
@@ -27,7 +26,6 @@ const PostDetails = () => {
         )}
       </div>
 
-      <CommentInput postId={postId} />
       <CommentTree postId={postId} />
 
     </div>
