@@ -98,7 +98,12 @@ const Register = () => {
             />
           </div>
 
-          <Button type="submit" disabled={loading}>
+          <Button
+            type="submit"
+            disabled={loading}
+            className="!bg-blue-600 hover:!bg-blue-700 !text-white border-0"
+            style={{ backgroundColor: "#2563eb", color: "#ffffff" }}
+          >
             {loading ? "Creating Account..." : "Create Account"}
           </Button>
         </form>
@@ -107,7 +112,7 @@ const Register = () => {
           Already have an account?{" "}
           <Link
             to="/login"
-            className="font-semibold text-purple-300 hover:text-purple-200"
+            className="font-semibold text-purple-400 hover:text-purple-300"
           >
             Log in
           </Link>
