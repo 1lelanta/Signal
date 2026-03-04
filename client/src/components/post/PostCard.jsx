@@ -66,11 +66,11 @@ const PostCard = ({post})=>{
                 <button
                     type="button"
                     onClick={() => setShowCommentInput((prev) => !prev)}
-                    className="text-lg leading-none"
+                    className="text-sm text-slate-300 hover:text-purple-400 font-medium"
                     aria-label="Toggle comment input"
                     title="Comment"
                 >
-                    💬
+                    Comment
                 </button>
 
                 {showCommentInput && (
@@ -89,7 +89,7 @@ const PostCard = ({post})=>{
                                 className="!bg-blue-600 hover:!bg-blue-700 !text-white border-0"
                                 aria-label="Submit comment"
                             >
-                                {isSubmitting ? "⏳" : "💬"}
+                                {isSubmitting ? "Posting..." : "Post"}
                             </Button>
                         </form>
                     ) : (

@@ -19,7 +19,7 @@ const CommentInput = ({onSubmit, parentId = null})=>{
             onChange={(e)=>setText(e.target.value)}
             placeholder="Write a comment..."
             />
-            <Button type="submit" aria-label="Submit comment">💬</Button>
+            <Button type="submit" aria-label="Submit comment">Post</Button>
 
         </form>
     )
