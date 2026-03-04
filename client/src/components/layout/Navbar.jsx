@@ -65,6 +65,15 @@ const Navbar = () => {
               </div>
 
               <Link
+                to="/messages"
+                className="text-xs sm:text-sm font-medium text-slate-300 hover:text-purple-400 transition"
+                aria-label="Messages"
+                title="Messages"
+              >
+                💬 Messages
+              </Link>
+
+              <Link
                 to="/"
                 className="hidden md:inline-flex bg-purple-600 hover:bg-purple-700 px-3 py-1.5 rounded-md text-sm font-medium transition"
               >
