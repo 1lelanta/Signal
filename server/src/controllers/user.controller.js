@@ -125,3 +125,87 @@ export const uploadUserAvatar = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 };
+
+export const toggleFollowUser = async (req, res) => {
+    try {
+        const targetUserId = req.params.id;
+        const currentUserId = req.user._id;
+
+        if (String(targetUserId) === String(currentUserId)) {
+            return res.status(400).json({ message: "You cannot follow yourself" });
+        }
+
+        const [currentUser, targetUser] = await Promise.all([
+            User.findById(currentUserId),
+            User.findById(targetUserId),
+        ]);
+
+        if (!currentUser || !targetUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const isFollowing = currentUser.following.some(
+            (id) => String(id) === String(targetUserId)
+        );
+
+        if (isFollowing) {
+            currentUser.following = currentUser.following.filter(
+                (id) => String(id) !== String(targetUserId)
+            );
+            targetUser.followers = targetUser.followers.filter(
+                (id) => String(id) !== String(currentUserId)
+            );
+        } else {
+            currentUser.following.push(targetUser._id);
+            targetUser.followers.push(currentUser._id);
+        }
+
+        await Promise.all([currentUser.save(), targetUser.save()]);
+
+        const followsYou = targetUser.following.some(
+            (id) => String(id) === String(currentUserId)
+        );
+
+        return res.json({
+            success: true,
+            following: !isFollowing,
+            followsYou,
+            followersCount: targetUser.followers.length,
+            followingCount: currentUser.following.length,
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+export const getFollowStatus = async (req, res) => {
+    try {
+        const targetUserId = req.params.id;
+        const currentUserId = req.user._id;
+
+        const [currentUser, targetUser] = await Promise.all([
+            User.findById(currentUserId).select("following"),
+            User.findById(targetUserId).select("followers following"),
+        ]);
+
+        if (!currentUser || !targetUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const following = currentUser.following.some(
+            (id) => String(id) === String(targetUserId)
+        );
+        const followsYou = targetUser.following.some(
+            (id) => String(id) === String(currentUserId)
+        );
+
+        return res.json({
+            success: true,
+            following,
+            followsYou,
+            followersCount: targetUser.followers.length,
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
