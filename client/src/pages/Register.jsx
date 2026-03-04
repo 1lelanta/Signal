@@ -40,7 +40,7 @@ const Register = () => {
       <div className="w-full max-w-md bg-slate-900 p-6 sm:p-8 rounded-xl shadow-lg">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-indigo-400">Signal</h1>
-          <p className="text-slate-400 mt-2">Create your account to connect</p>
+          <p className="text-slate-300 mt-2">Create your account to connect</p>
         </div>
 
         {error && (
@@ -103,11 +103,11 @@ const Register = () => {
           </Button>
         </form>
 
-        <p className="text-center text-sm text-slate-400 mt-8">
+        <p className="text-center text-sm text-slate-300 mt-8">
           Already have an account?{" "}
           <Link
             to="/login"
-            className="font-medium text-indigo-400 hover:text-indigo-300"
+            className="font-semibold text-purple-300 hover:text-purple-200"
           >
             Log in
           </Link>

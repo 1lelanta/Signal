@@ -50,10 +50,10 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Link to="/login" className="text-xs sm:text-sm text-slate-400 hover:text-purple-400 transition">
+              <Link to="/login" className="text-xs sm:text-sm font-medium text-slate-200 hover:text-purple-300 transition">
                 Login
               </Link>
-              <Link to="/register" className="text-xs sm:text-sm text-slate-400 hover:text-purple-400 transition">
+              <Link to="/register" className="text-xs sm:text-sm font-medium text-slate-200 hover:text-purple-300 transition">
                 Register
               </Link>
             </>
