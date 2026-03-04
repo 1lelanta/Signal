@@ -6,7 +6,7 @@ const Layout = ({ children }) => {
     <div className="min-h-screen bg-slate-950 text-slate-200">
       <Navbar />
 
-      <div className="flex">
+      <div className="mx-auto flex w-full max-w-screen-2xl">
         {/* Desktop Sidebar */}
         <div className="hidden md:block">
           <Sidebar />
