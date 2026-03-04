@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import DepthScoreBadge from "./DepthScoreBadge";
 import Button from "../ui/Button";
@@ -11,6 +11,36 @@ const PostCard = ({post})=>{
     const [commentText, setCommentText] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [commentMessage, setCommentMessage] = useState("");
+    const [comments, setComments] = useState([]);
+    const [commentsLoading, setCommentsLoading] = useState(false);
+
+    useEffect(() => {
+        let mounted = true;
+
+        const fetchComments = async () => {
+            try {
+                setCommentsLoading(true);
+                const res = await api.get(`/comments/post/${post._id}`);
+                if (mounted) {
+                    setComments(Array.isArray(res.data) ? res.data : []);
+                }
+            } catch (err) {
+                if (mounted) {
+                    setComments([]);
+                }
+            } finally {
+                if (mounted) {
+                    setCommentsLoading(false);
+                }
+            }
+        };
+
+        fetchComments();
+
+        return () => {
+            mounted = false;
+        };
+    }, [post._id]);
 
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
@@ -20,12 +50,15 @@ const PostCard = ({post})=>{
         try {
             setIsSubmitting(true);
             setCommentMessage("");
-            await api.post(`/comments/${post._id}`, {
+            const res = await api.post(`/comments/${post._id}`, {
                 content,
                 type: "expansion",
             });
             setCommentText("");
             setCommentMessage("Comment posted");
+            if (res?.data) {
+                setComments((prev) => [res.data, ...prev]);
+            }
         } catch (err) {
             setCommentMessage(err?.response?.data?.message || "Failed to post comment");
         } finally {
@@ -99,6 +132,21 @@ const PostCard = ({post})=>{
                     )
                 )}
                 {commentMessage && <p className="text-xs text-slate-300 mt-2">{commentMessage}</p>}
+
+                <div className="mt-3 space-y-2">
+                    {commentsLoading ? (
+                        <p className="text-xs text-slate-400">Loading comments...</p>
+                    ) : comments.length > 0 ? (
+                        comments.map((comment) => (
+                            <div key={comment._id} className="bg-slate-800/70 border border-slate-700 rounded-md px-3 py-2">
+                                <p className="text-xs text-slate-400">{comment.author?.username || "User"}</p>
+                                <p className="text-sm text-slate-200 mt-1 break-words">{comment.content}</p>
+                            </div>
+                        ))
+                    ) : (
+                        <p className="text-xs text-slate-400">No comments yet.</p>
+                    )}
+                </div>
             </div>
 
             {/* Footer */}
