@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import DepthScoreBadge from "./DepthScoreBadge";
 import Button from "../ui/Button";
@@ -13,34 +13,28 @@ const PostCard = ({post})=>{
     const [commentMessage, setCommentMessage] = useState("");
     const [comments, setComments] = useState([]);
     const [commentsLoading, setCommentsLoading] = useState(false);
+    const [commentsLoaded, setCommentsLoaded] = useState(false);
 
-    useEffect(() => {
-        let mounted = true;
+    const fetchComments = async () => {
+        try {
+            setCommentsLoading(true);
+            const res = await api.get(`/comments/post/${post._id}`);
+            setComments(Array.isArray(res.data) ? res.data : []);
+        } catch (err) {
+            setComments([]);
+        } finally {
+            setCommentsLoading(false);
+            setCommentsLoaded(true);
+        }
+    };
 
-        const fetchComments = async () => {
-            try {
-                setCommentsLoading(true);
-                const res = await api.get(`/comments/post/${post._id}`);
-                if (mounted) {
-                    setComments(Array.isArray(res.data) ? res.data : []);
-                }
-            } catch (err) {
-                if (mounted) {
-                    setComments([]);
-                }
-            } finally {
-                if (mounted) {
-                    setCommentsLoading(false);
-                }
-            }
-        };
-
-        fetchComments();
-
-        return () => {
-            mounted = false;
-        };
-    }, [post._id]);
+    const toggleComments = async () => {
+        const next = !showCommentInput;
+        setShowCommentInput(next);
+        if (next && !commentsLoaded) {
+            await fetchComments();
+        }
+    };
 
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
@@ -98,7 +92,7 @@ const PostCard = ({post})=>{
             <div className="mt-3 border-t border-slate-800 pt-3">
                 <button
                     type="button"
-                    onClick={() => setShowCommentInput((prev) => !prev)}
+                    onClick={toggleComments}
                     className="text-sm text-slate-300 hover:text-purple-400 font-medium"
                     aria-label="Toggle comment input"
                     title="Comment"
@@ -131,22 +125,26 @@ const PostCard = ({post})=>{
                         <p className="text-xs text-slate-400 mt-2">Log in to comment on this post.</p>
                     )
                 )}
-                {commentMessage && <p className="text-xs text-slate-300 mt-2">{commentMessage}</p>}
+                {showCommentInput && (
+                    <>
+                        {commentMessage && <p className="text-xs text-slate-300 mt-2">{commentMessage}</p>}
 
-                <div className="mt-3 space-y-2">
-                    {commentsLoading ? (
-                        <p className="text-xs text-slate-400">Loading comments...</p>
-                    ) : comments.length > 0 ? (
-                        comments.map((comment) => (
-                            <div key={comment._id} className="bg-slate-800/70 border border-slate-700 rounded-md px-3 py-2">
-                                <p className="text-xs text-slate-400">{comment.author?.username || "User"}</p>
-                                <p className="text-sm text-slate-200 mt-1 break-words">{comment.content}</p>
-                            </div>
-                        ))
-                    ) : (
-                        <p className="text-xs text-slate-400">No comments yet.</p>
-                    )}
-                </div>
+                        <div className="mt-3 space-y-2">
+                            {commentsLoading ? (
+                                <p className="text-xs text-slate-400">Loading comments...</p>
+                            ) : comments.length > 0 ? (
+                                comments.map((comment) => (
+                                    <div key={comment._id} className="bg-slate-800/70 border border-slate-700 rounded-md px-3 py-2">
+                                        <p className="text-xs text-slate-400">{comment.author?.username || "User"}</p>
+                                        <p className="text-sm text-slate-200 mt-1 break-words">{comment.content}</p>
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="text-xs text-slate-400">No comments yet.</p>
+                            )}
+                        </div>
+                    </>
+                )}
             </div>
 
             {/* Footer */}
