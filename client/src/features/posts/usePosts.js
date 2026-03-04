@@ -4,19 +4,40 @@ import api from "../../services/axios";
 export function usePosts(userId = null) {
 	const [posts, setPosts] = useState([]);
 	const [loading, setLoading] = useState(true);
+	const [loadingMore, setLoadingMore] = useState(false);
+	const [page, setPage] = useState(1);
+	const [hasMore, setHasMore] = useState(false);
+	const PAGE_SIZE = 10;
 
-	const fetchPosts = useCallback(async () => {
+	const fetchPosts = useCallback(async (targetPage = 1, append = false) => {
 		setLoading(true);
 		try {
-			const res = await api.get("/feed");
-			let data = res.data || [];
 			if (userId) {
+				const res = await api.get("/feed");
+				let data = res.data || [];
 				data = data.filter((p) => p.author?._id === userId || p.author === userId);
+				setPosts(data);
+				setHasMore(false);
+				setPage(1);
+				return;
 			}
-			setPosts(data);
+
+			const res = await api.get(`/feed?page=${targetPage}&limit=${PAGE_SIZE}`);
+			const payload = res.data || {};
+			const items = Array.isArray(payload.items) ? payload.items : [];
+
+			if (append) {
+				setPosts((prev) => [...prev, ...items]);
+			} else {
+				setPosts(items);
+			}
+
+			setHasMore(!!payload.hasMore);
+			setPage(targetPage);
 		} catch (err) {
 			console.error("usePosts: failed to load posts", err);
 			setPosts([]);
+			setHasMore(false);
 		} finally {
 			setLoading(false);
 		}
@@ -25,6 +46,16 @@ export function usePosts(userId = null) {
 	useEffect(() => {
 		fetchPosts();
 	}, [fetchPosts]);
+
+	const loadMore = useCallback(async () => {
+		if (!hasMore || loadingMore || userId) return;
+		try {
+			setLoadingMore(true);
+			await fetchPosts(page + 1, true);
+		} finally {
+			setLoadingMore(false);
+		}
+	}, [fetchPosts, hasMore, loadingMore, page, userId]);
 
 	const createPost = useCallback(async ({ title, content, tags = [], imageFile = null }) => {
 		const safeContent = (content || "").trim();
@@ -78,6 +109,6 @@ export function usePosts(userId = null) {
 		[posts]
 	);
 
-	return { posts, loading, getPostById, createPost, reload: fetchPosts };
+	return { posts, loading, loadingMore, hasMore, loadMore, getPostById, createPost, reload: fetchPosts };
 }
 
