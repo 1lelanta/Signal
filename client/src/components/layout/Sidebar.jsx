@@ -59,6 +59,19 @@ const Sidebar = () => {
           Reputation
         </NavLink>
 
+        <NavLink
+          to="/messages"
+          className={({ isActive }) =>
+            `${linkBase} ${
+              isActive
+                ? "bg-purple-600 text-white"
+                : "text-slate-400 hover:bg-slate-800"
+            }`
+          }
+        >
+          Messages
+        </NavLink>
+
       </nav>
     </aside>
   );

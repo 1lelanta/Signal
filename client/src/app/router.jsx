@@ -8,6 +8,7 @@ import Profile from "../pages/Profile";
 import PostDetails from "../pages/PostDetails";
 import Notifications from "../pages/Notifications";
 import Reputation from "../pages/Reputation";
+import Messages from "../pages/Messages";
 import NotFound from "../pages/NotFound";
 import Layout from "../components/layout/layout";
 
@@ -72,6 +73,17 @@ const Router = () => {
             <ProtectedRoute>
               <Layout>
                 <Reputation />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/messages"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Messages />
               </Layout>
             </ProtectedRoute>
           }
