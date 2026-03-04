@@ -4,6 +4,7 @@ import socket from "../services/socket";
 import {
   getConversation,
   getMessageUsers,
+  getUnreadMessagesCount,
   sendPrivateMessage,
 } from "../features/messages/messagesAPI";
 
@@ -28,6 +29,7 @@ const Messages = () => {
     const loadUsers = async () => {
       try {
         setLoadingUsers(true);
+        await getUnreadMessagesCount();
         const data = await getMessageUsers();
         setUsers(Array.isArray(data) ? data : []);
         if (data?.length) setActiveUserId(data[0]._id);

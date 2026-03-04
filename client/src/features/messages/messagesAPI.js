@@ -14,3 +14,8 @@ export const sendPrivateMessage = async (userId, text) => {
   const res = await api.post(`/messages/${userId}`, { text });
   return res.data;
 };
+
+export const getUnreadMessagesCount = async () => {
+  const res = await api.get("/messages/unread/count");
+  return res.data;
+};

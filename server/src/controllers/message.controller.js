@@ -19,6 +19,15 @@ export const getConversation = async (req, res) => {
     const myId = req.user._id;
     const otherUserId = req.params.userId;
 
+    await Message.updateMany(
+      {
+        sender: otherUserId,
+        receiver: myId,
+        readAt: null,
+      },
+      { $set: { readAt: new Date() } }
+    );
+
     const messages = await Message.find({
       $or: [
         { sender: myId, receiver: otherUserId },
@@ -62,6 +71,19 @@ export const sendMessage = async (req, res) => {
     }
 
     return res.status(201).json(message);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const getUnreadCount = async (req, res) => {
+  try {
+    const count = await Message.countDocuments({
+      receiver: req.user._id,
+      readAt: null,
+    });
+
+    return res.json({ success: true, count });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
