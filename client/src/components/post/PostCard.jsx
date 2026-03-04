@@ -10,10 +10,13 @@ const PostCard = ({post})=>{
     const [showCommentInput, setShowCommentInput] = useState(false);
     const [commentText, setCommentText] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isReplySubmitting, setIsReplySubmitting] = useState(false);
     const [commentMessage, setCommentMessage] = useState("");
     const [comments, setComments] = useState([]);
     const [commentsLoading, setCommentsLoading] = useState(false);
     const [commentsLoaded, setCommentsLoaded] = useState(false);
+    const [activeReplyId, setActiveReplyId] = useState(null);
+    const [replyText, setReplyText] = useState("");
 
     const fetchComments = async () => {
         try {
@@ -59,6 +62,91 @@ const PostCard = ({post})=>{
             setIsSubmitting(false);
         }
     };
+
+    const handleReplySubmit = async (e, parentCommentId) => {
+        e.preventDefault();
+        const content = replyText.trim();
+        if (!content) return;
+
+        try {
+            setIsReplySubmitting(true);
+            setCommentMessage("");
+            const res = await api.post(`/comments/${post._id}`, {
+                content,
+                type: "expansion",
+                parentCommentId,
+            });
+
+            if (res?.data) {
+                setComments((prev) => [...prev, res.data]);
+            }
+            setReplyText("");
+            setActiveReplyId(null);
+            setCommentMessage("Reply posted");
+        } catch (err) {
+            setCommentMessage(err?.response?.data?.message || "Failed to post reply");
+        } finally {
+            setIsReplySubmitting(false);
+        }
+    };
+
+    const getReplies = (parentId) =>
+        comments.filter((comment) => String(comment.parentComment || "") === String(parentId));
+
+    const renderCommentItem = (comment, level = 0) => {
+        const replies = getReplies(comment._id);
+
+        return (
+            <div key={comment._id} className="space-y-2" style={{ marginLeft: `${Math.min(level, 3) * 16}px` }}>
+                <div className="bg-slate-800/70 border border-slate-700 rounded-md px-3 py-2">
+                    <p className="text-xs text-slate-400">{comment.author?.username || "User"}</p>
+                    <p className="text-sm text-slate-200 mt-1 break-words">{comment.content}</p>
+                    <button
+                        type="button"
+                        onClick={() => {
+                            if (activeReplyId === comment._id) {
+                                setActiveReplyId(null);
+                                setReplyText("");
+                                return;
+                            }
+                            setActiveReplyId(comment._id);
+                            setReplyText("");
+                        }}
+                        className="mt-2 text-xs text-purple-300 hover:text-purple-200"
+                    >
+                        Reply
+                    </button>
+                </div>
+
+                {activeReplyId === comment._id && user && (
+                    <form onSubmit={(e) => handleReplySubmit(e, comment._id)} className="relative">
+                        <input
+                            type="text"
+                            value={replyText}
+                            onChange={(e) => setReplyText(e.target.value)}
+                            placeholder="Write a reply..."
+                            className="w-full bg-slate-800 border border-slate-700 rounded-md px-3 pr-20 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        />
+                        <Button
+                            type="submit"
+                            disabled={isReplySubmitting || !replyText.trim()}
+                            className="!bg-blue-600 hover:!bg-blue-700 !text-white border-0 !px-3 !py-1.5 absolute right-1 top-1/2 -translate-y-1/2"
+                        >
+                            {isReplySubmitting ? "..." : "Post"}
+                        </Button>
+                    </form>
+                )}
+
+                {replies.length > 0 && (
+                    <div className="space-y-2">
+                        {replies.map((reply) => renderCommentItem(reply, level + 1))}
+                    </div>
+                )}
+            </div>
+        );
+    };
+
+    const topLevelComments = comments.filter((comment) => !comment.parentComment);
 
     return(
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 sm:p-5 hover:border-purple-600/40 transition duration-300">
@@ -132,13 +220,8 @@ const PostCard = ({post})=>{
                         <div className="mt-3 space-y-2">
                             {commentsLoading ? (
                                 <p className="text-xs text-slate-400">Loading comments...</p>
-                            ) : comments.length > 0 ? (
-                                comments.map((comment) => (
-                                    <div key={comment._id} className="bg-slate-800/70 border border-slate-700 rounded-md px-3 py-2">
-                                        <p className="text-xs text-slate-400">{comment.author?.username || "User"}</p>
-                                        <p className="text-sm text-slate-200 mt-1 break-words">{comment.content}</p>
-                                    </div>
-                                ))
+                            ) : topLevelComments.length > 0 ? (
+                                topLevelComments.map((comment) => renderCommentItem(comment))
                             ) : (
                                 <p className="text-xs text-slate-400">No comments yet.</p>
                             )}
