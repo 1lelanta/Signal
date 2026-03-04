@@ -4,6 +4,12 @@ import Button from "../ui/Button";
 import api from "../../services/axios";
 import { useAuth } from "../../features/auth/useAuth";
 
+const getInitials = (name = "User") => {
+    const parts = String(name).trim().split(/\s+/).filter(Boolean);
+    if (parts.length >= 2) return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+    return (parts[0] || "U").slice(0, 2).toUpperCase();
+};
+
 const PostCard = ({post})=>{
     const { user } = useAuth();
     const [showCommentInput, setShowCommentInput] = useState(false);
@@ -151,9 +157,21 @@ const PostCard = ({post})=>{
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 sm:p-5 hover:border-purple-600/40 transition duration-300">
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-3 mb-3">
-                <Link to={`/profile/${post.author._id}`} 
-                className="text-sm font-medium text-slate-300 hover:text-purple-400 break-all">
-                    {post.author.username}
+                <Link to={`/profile/${post.author._id}`} className="inline-flex items-center gap-2 min-w-0">
+                    {post.author?.avatar ? (
+                        <img
+                            src={post.author.avatar}
+                            alt={post.author.username}
+                            className="h-8 w-8 rounded-full object-cover border border-slate-700"
+                        />
+                    ) : (
+                        <div className="h-8 w-8 rounded-full bg-slate-700 border border-slate-600 text-xs text-slate-200 font-semibold flex items-center justify-center">
+                            {getInitials(post.author?.username)}
+                        </div>
+                    )}
+                    <span className="text-sm font-medium text-slate-300 hover:text-purple-400 break-all">
+                        {post.author.username}
+                    </span>
                 </Link>
                 <p className="text-xs text-slate-500 sm:text-right">
                     Reputation {post.author.reputationScore}
