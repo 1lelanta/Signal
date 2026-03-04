@@ -3,13 +3,31 @@ import Post from "../models/Post.model.js";
 
 export const addComment = async(req,res)=>{
     try {
-        const {content, type} = req.body;
+        const {content, type, parentCommentId} = req.body;
+
+        const safeContent = String(content || "").trim();
+        if (!safeContent) {
+            return res.status(400).json({ message: "Comment content is required" });
+        }
+
+        let parentComment = null;
+        if (parentCommentId) {
+            parentComment = await Comment.findById(parentCommentId).select("_id post");
+            if (!parentComment) {
+                return res.status(404).json({ message: "Parent comment not found" });
+            }
+
+            if (String(parentComment.post) !== String(req.params.postId)) {
+                return res.status(400).json({ message: "Parent comment must belong to same post" });
+            }
+        }
 
         const comment  = await Comment.create({
             post:req.params.postId,
             author:req.user.id,
-            content,
-            type,
+            parentComment: parentComment?._id || null,
+            content: safeContent,
+            type: type || "expansion",
         })
 
         const populatedComment = await Comment.findById(comment._id)
@@ -26,7 +44,7 @@ export const addComment = async(req,res)=>{
 export const getCommentsByPost = async (req, res) => {
     try {
         const comments = await Comment.find({ post: req.params.postId })
-            .sort({ createdAt: -1 })
+            .sort({ createdAt: 1 })
             .populate("author", "username");
 
         res.json(comments);
