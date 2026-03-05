@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../features/auth/useAuth";
 import { getUnreadMessagesCount } from "../../features/messages/messagesAPI";
@@ -59,6 +59,50 @@ const Sidebar = () => {
         isWarm ? "border-stone-300 bg-stone-100" : "border-slate-800 bg-slate-900"
       }`}
     >
+      {user && (
+        <Link
+          to="/profile"
+          className={`mb-4 block rounded-lg border p-3 transition-colors ${
+            isWarm
+              ? "border-stone-300 bg-stone-50 hover:bg-stone-200"
+              : "border-slate-800 bg-slate-950 hover:bg-slate-800"
+          }`}
+        >
+          <div className="flex items-start gap-3">
+            <div className="h-10 w-10 overflow-hidden rounded-full border border-slate-700 bg-slate-800 shrink-0">
+              {user?.avatar ? (
+                <img
+                  src={user.avatar}
+                  alt={user?.username || "User"}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center text-xs font-semibold text-slate-300">
+                  {String(user?.username || "U").slice(0, 2).toUpperCase()}
+                </div>
+              )}
+            </div>
+
+            <div className="min-w-0">
+              <p
+                className={`truncate text-sm font-semibold ${
+                  isWarm ? "text-slate-900" : "text-slate-100"
+                }`}
+              >
+                {user?.username || "User"}
+              </p>
+              <p
+                className={`mt-1 line-clamp-2 text-xs ${
+                  isWarm ? "text-slate-600" : "text-slate-400"
+                }`}
+              >
+                {user?.bio?.trim() || "No bio added yet."}
+              </p>
+            </div>
+          </div>
+        </Link>
+      )}
+
       <nav className="space-y-2">
         
         <NavLink
