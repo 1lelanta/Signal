@@ -9,22 +9,24 @@ export default function Home() {
   const { posts, loading, createPost, hasMore, loadingMore, loadMore } = usePosts(null, q);
 
   return (
-    <div className="w-full space-y-6 lg:max-w-4xl lg:mx-auto 2xl:max-w-5xl">
+    <div className="w-full lg:max-w-4xl lg:mx-auto 2xl:max-w-5xl h-[calc(100vh-9rem)] flex flex-col gap-6">
 
       {/* Create Post */}
       <PostComposer onSubmit={createPost} />
 
       {/* Feed */}
-      {loading ? (
-        <div className="text-center py-10">Loading posts...</div>
-      ) : (
-        <PostList
-          posts={posts}
-          hasMore={hasMore}
-          loadingMore={loadingMore}
-          onLoadMore={loadMore}
-        />
-      )}
+      <div className="flex-1 overflow-y-auto pr-1">
+        {loading ? (
+          <div className="text-center py-10">Loading posts...</div>
+        ) : (
+          <PostList
+            posts={posts}
+            hasMore={hasMore}
+            loadingMore={loadingMore}
+            onLoadMore={loadMore}
+          />
+        )}
+      </div>
 
     </div>
   );
