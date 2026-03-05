@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../features/auth/useAuth";
 import { getUnreadMessagesCount } from "../../features/messages/messagesAPI";
 import socket from "../../services/socket";
+import { useTheme } from "../../app/themeContext";
 
 const linkBase = "block px-4 py-2 rounded-md text-sm transition";
 
 const Sidebar = () => {
   const { user } = useAuth();
+  const { isWarm } = useTheme();
   const location = useLocation();
   const userId = user?._id || user?.id;
   const [unreadCount, setUnreadCount] = useState(0);
@@ -52,7 +54,11 @@ const Sidebar = () => {
   }, [userId]);
 
   return (
-    <aside className="w-64 h-[calc(100vh-64px)] border-r border-slate-800 bg-slate-900 p-4">
+    <aside
+      className={`w-64 h-[calc(100vh-64px)] border-r p-4 ${
+        isWarm ? "border-stone-300 bg-stone-100" : "border-slate-800 bg-slate-900"
+      }`}
+    >
       <nav className="space-y-2">
         
         <NavLink
@@ -61,6 +67,8 @@ const Sidebar = () => {
             `${linkBase} ${
               isActive
                 ? "bg-purple-600 text-white"
+                : isWarm
+                ? "text-slate-600 hover:bg-stone-200"
                 : "text-slate-400 hover:bg-slate-800"
             }`
           }
@@ -74,6 +82,8 @@ const Sidebar = () => {
             `${linkBase} ${
               isActive
                 ? "bg-purple-600 text-white"
+                : isWarm
+                ? "text-slate-600 hover:bg-stone-200"
                 : "text-slate-400 hover:bg-slate-800"
             }`
           }
@@ -87,6 +97,8 @@ const Sidebar = () => {
             `${linkBase} ${
               isActive
                 ? "bg-purple-600 text-white"
+                : isWarm
+                ? "text-slate-600 hover:bg-stone-200"
                 : "text-slate-400 hover:bg-slate-800"
             }`
           }
@@ -100,6 +112,8 @@ const Sidebar = () => {
             `${linkBase} ${
               isActive
                 ? "bg-purple-600 text-white"
+                : isWarm
+                ? "text-slate-600 hover:bg-stone-200"
                 : "text-slate-400 hover:bg-slate-800"
             }`
           }
@@ -113,6 +127,8 @@ const Sidebar = () => {
             `${linkBase} ${
               isActive
                 ? "bg-purple-600 text-white"
+                : isWarm
+                ? "text-slate-600 hover:bg-stone-200"
                 : "text-slate-400 hover:bg-slate-800"
             }`
           }

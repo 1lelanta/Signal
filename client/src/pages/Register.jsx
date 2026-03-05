@@ -4,9 +4,11 @@ import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import { registerUser } from "../features/auth/authAPI";
 import { Link, useNavigate } from "react-router-dom";
+import { useTheme } from "../app/themeContext";
 
 const Register = () => {
   const { login } = useAuth();
+  const { isWarm } = useTheme();
   const navigate = useNavigate();
   const [form, setForm] = useState({
     username: "",
@@ -36,7 +38,11 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center p-4">
+    <div
+      className={`min-h-screen flex items-center justify-center p-4 ${
+        isWarm ? "bg-stone-100 text-slate-900" : "bg-slate-950 text-white"
+      }`}
+    >
       <div className="w-full max-w-md bg-slate-900 p-6 sm:p-8 rounded-xl shadow-lg">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-indigo-400">Signal</h1>
