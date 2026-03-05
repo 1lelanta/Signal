@@ -2,13 +2,10 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../features/auth/useAuth";
-import { useReputation } from "../../features/reputation/useReputation";
-import ReputationBadge from "../reputation/ReputationBadge";
 import { useTheme } from "../../app/themeContext";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
-  const { score } = useReputation(user?._id);
   const { isWarm, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
@@ -152,10 +149,6 @@ const Navbar = () => {
               >
                 Messages
               </Link>
-
-              <div className="hidden md:block">
-                {user && <ReputationBadge score={score} />}
-              </div>
 
               <button
                 onClick={logout}
