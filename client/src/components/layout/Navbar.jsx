@@ -59,18 +59,23 @@ const Navbar = () => {
           SIGNAL
         </Link>
 
-        <form onSubmit={handleSubmitSearch} className="hidden md:flex flex-1 max-w-md items-center">
+        <form onSubmit={handleSubmitSearch} className="flex flex-1 max-w-md items-center">
           <label htmlFor="nav-search" className="sr-only">
             Search posts
           </label>
-          <input
-            id="nav-search"
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search"
-            className="w-full rounded-md border border-slate-700 px-3 py-1.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-purple-500"
-          />
+          <div className="relative w-full">
+            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-500">
+              Search
+            </span>
+            <input
+              id="nav-search"
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder=""
+              className="w-full rounded-md border border-slate-700 pl-20 pr-3 py-1.5 text-sm text-slate-100 outline-none focus:border-purple-500"
+            />
+          </div>
         </form>
 
         <div className="flex min-w-0 items-center gap-3 sm:gap-5">
