@@ -1,5 +1,4 @@
 import Comment from "../models/Comment.model.js";
-import Post from "../models/Post.model.js";
 import path from "path";
 import { ENV } from "../config/env.js";
 import supabase, { ensureBucketExists } from "../config/supabase.js";

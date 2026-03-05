@@ -32,7 +32,7 @@ const CommentItem = ({
                 </button>
 
             </div>
-                        <p className="mt-2 text-sm break-words">{comment.content || ""}</p>
+                        <p className="mt-2 text-sm break-words">{comment.content || comment.text || ""}</p>
                         {comment.imageUrl && (
                                 <img
                                     src={comment.imageUrl}
@@ -50,10 +50,10 @@ const CommentItem = ({
                 onSubmit={addComment}
                 parentId={comment._id}
                 />
-            )};
+            )}
 
             { comment.children?.map((child)=>(
-                <commentItem 
+                <CommentItem 
                 key={child._id}
                 comment={child}
                 addComment={addComment}
