@@ -173,27 +173,6 @@ const Navbar = () => {
                 Messages
               </Link>
 
-              <Link
-                to="/profile"
-                className={`inline-flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border text-[11px] font-semibold transition-colors ${
-                  isWarm
-                    ? "border-stone-300 bg-stone-50 text-slate-700 hover:border-purple-500"
-                    : "border-slate-700 bg-slate-900 text-slate-200 hover:border-purple-500"
-                }`}
-                aria-label="Profile"
-                title="Profile"
-              >
-                {user?.avatar ? (
-                  <img
-                    src={user.avatar}
-                    alt={user?.username || "User"}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  initials
-                )}
-              </Link>
-
               <div className="hidden md:block">
                 {user && <ReputationBadge score={score} />}
               </div>
