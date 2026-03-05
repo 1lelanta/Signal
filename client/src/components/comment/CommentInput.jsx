@@ -31,10 +31,10 @@ const CommentInput = ({onSubmit, parentId = null})=>{
                 />
                 <Button
                     type="submit"
-                    aria-label={parentId ? "Submit reply" : "Submit comment"}
+                    aria-label="Submit comment"
                     className="!bg-blue-600 hover:!bg-blue-700 !text-white border-0 !px-3 !py-1.5 absolute right-1 top-1/2 -translate-y-1/2"
                 >
-                    {parentId ? "Reply" : "Comment"}
+                    Comment
                 </Button>
             </div>
 
