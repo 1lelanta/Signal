@@ -26,15 +26,15 @@ const CommentInput = ({onSubmit, parentId = null})=>{
                 <Input 
                 value={text}
                 onChange={(e)=>setText(e.target.value)}
-                placeholder="Write a comment..."
+                placeholder={parentId ? "Add a reply..." : "Add a comment..."}
                 className="pr-20"
                 />
                 <Button
                     type="submit"
-                    aria-label="Submit comment"
+                    aria-label={parentId ? "Submit reply" : "Submit comment"}
                     className="!bg-blue-600 hover:!bg-blue-700 !text-white border-0 !px-3 !py-1.5 absolute right-1 top-1/2 -translate-y-1/2"
                 >
-                    Post
+                    {parentId ? "Reply" : "Comment"}
                 </Button>
             </div>
 
