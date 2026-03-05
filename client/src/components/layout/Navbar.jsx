@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../features/auth/useAuth";
 import { useReputation } from "../../features/reputation/useReputation";
 import ReputationBadge from "../reputation/ReputationBadge";
+import { useTheme } from "../../app/themeContext";
 
 const getUserInitials = (user) => {
   const fullName =
@@ -27,6 +28,7 @@ const getUserInitials = (user) => {
 const Navbar = () => {
   const { user, logout } = useAuth();
   const { score } = useReputation(user?._id);
+  const { isWarm, toggleTheme } = useTheme();
   const initials = getUserInitials(user);
   const navigate = useNavigate();
   const location = useLocation();
@@ -35,8 +37,9 @@ const Navbar = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const linkClass =
-    "text-sm font-medium text-slate-300 hover:text-slate-100 transition-colors";
+  const linkClass = `text-sm font-medium transition-colors ${
+    isWarm ? "text-slate-700 hover:text-slate-900" : "text-slate-300 hover:text-slate-100"
+  }`;
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -50,11 +53,17 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-slate-800 bg-slate-950/95 backdrop-blur">
+    <nav
+      className={`sticky top-0 z-50 border-b backdrop-blur ${
+        isWarm ? "border-stone-300 bg-stone-100/95" : "border-slate-800 bg-slate-950/95"
+      }`}
+    >
       <div className="mx-auto flex h-14 w-full max-w-screen-2xl items-center justify-between gap-3 px-3 sm:px-4 lg:px-8">
         <Link 
           to="/" 
-          className="text-base sm:text-lg font-semibold tracking-tight text-slate-100"
+          className={`text-base sm:text-lg font-semibold tracking-tight ${
+            isWarm ? "text-slate-900" : "text-slate-100"
+          }`}
         >
           SIGNAL
         </Link>
@@ -64,7 +73,11 @@ const Navbar = () => {
             Search posts
           </label>
           <div className="relative w-full">
-            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">
+            <span
+              className={`pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 ${
+                isWarm ? "text-stone-500" : "text-slate-500"
+              }`}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -84,12 +97,29 @@ const Navbar = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search"
-              className="w-full rounded-md border border-slate-700 pl-10 pr-3 py-1.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-purple-500"
+              className={`w-full rounded-md border pl-10 pr-3 py-1.5 text-sm outline-none focus:border-purple-500 ${
+                isWarm
+                  ? "border-stone-300 text-slate-900 placeholder:text-stone-500"
+                  : "border-slate-700 text-slate-100 placeholder:text-slate-500"
+              }`}
             />
           </div>
         </form>
 
         <div className="flex min-w-0 items-center gap-3 sm:gap-5">
+          <button
+            onClick={toggleTheme}
+            className={`rounded-md border px-2.5 py-1 text-xs font-medium transition-colors ${
+              isWarm
+                ? "border-stone-300 text-slate-700 hover:text-slate-900"
+                : "border-slate-700 text-slate-300 hover:text-slate-100"
+            }`}
+            title="Toggle background"
+            aria-label="Toggle background"
+          >
+            {isWarm ? "Dark" : "Warm"}
+          </button>
+
           {user ? (
             <>
               <Link
@@ -113,7 +143,11 @@ const Navbar = () => {
 
               <Link
                 to="/profile"
-                className="inline-flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-slate-700 bg-slate-900 text-[11px] font-semibold text-slate-200 hover:border-purple-500 transition-colors"
+                className={`inline-flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border text-[11px] font-semibold transition-colors ${
+                  isWarm
+                    ? "border-stone-300 bg-stone-50 text-slate-700 hover:border-purple-500"
+                    : "border-slate-700 bg-slate-900 text-slate-200 hover:border-purple-500"
+                }`}
                 aria-label="Profile"
                 title="Profile"
               >
@@ -134,7 +168,9 @@ const Navbar = () => {
 
               <button
                 onClick={logout}
-                className="text-sm font-medium text-slate-400 hover:text-slate-200 transition-colors"
+                className={`text-sm font-medium transition-colors ${
+                  isWarm ? "text-slate-600 hover:text-slate-900" : "text-slate-400 hover:text-slate-200"
+                }`}
               >
                 Logout
               </button>
