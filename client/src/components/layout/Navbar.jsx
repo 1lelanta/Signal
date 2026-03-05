@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../features/auth/useAuth";
 import { useReputation } from "../../features/reputation/useReputation";
 import ReputationBadge from "../reputation/ReputationBadge";
@@ -26,12 +28,26 @@ const Navbar = () => {
   const { user, logout } = useAuth();
   const { score } = useReputation(user?._id);
   const initials = getUserInitials(user);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [searchTerm, setSearchTerm] = useState("");
   const handleGoHome = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const linkClass =
     "text-sm font-medium text-slate-300 hover:text-slate-100 transition-colors";
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    setSearchTerm(params.get("q") || "");
+  }, [location.search]);
+
+  const handleSubmitSearch = (e) => {
+    e.preventDefault();
+    const q = searchTerm.trim();
+    navigate(q ? `/?q=${encodeURIComponent(q)}` : "/");
+  };
 
   return (
     <nav className="sticky top-0 z-50 border-b border-slate-800 bg-slate-950/95 backdrop-blur">
@@ -42,6 +58,20 @@ const Navbar = () => {
         >
           SIGNAL
         </Link>
+
+        <form onSubmit={handleSubmitSearch} className="hidden md:block flex-1 max-w-md">
+          <label htmlFor="nav-search" className="sr-only">
+            Search posts
+          </label>
+          <input
+            id="nav-search"
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search posts"
+            className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-1.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-purple-500"
+          />
+        </form>
 
         <div className="flex min-w-0 items-center gap-3 sm:gap-5">
           {user ? (

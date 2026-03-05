@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import api from "../../services/axios";
 
-export function usePosts(userId = null) {
+export function usePosts(userId = null, searchQuery = "") {
 	const [posts, setPosts] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [loadingMore, setLoadingMore] = useState(false);
@@ -12,6 +12,8 @@ export function usePosts(userId = null) {
 	const fetchPosts = useCallback(async (targetPage = 1, append = false) => {
 		setLoading(true);
 		try {
+			const trimmedQuery = searchQuery.trim();
+			const encodedQuery = encodeURIComponent(trimmedQuery);
 			if (userId) {
 				const res = await api.get("/feed");
 				let data = res.data || [];
@@ -22,7 +24,8 @@ export function usePosts(userId = null) {
 				return;
 			}
 
-			const res = await api.get(`/feed?page=${targetPage}&limit=${PAGE_SIZE}`);
+			const querySuffix = trimmedQuery ? `&q=${encodedQuery}` : "";
+			const res = await api.get(`/feed?page=${targetPage}&limit=${PAGE_SIZE}${querySuffix}`);
 			const payload = res.data || {};
 			const items = Array.isArray(payload.items) ? payload.items : [];
 
@@ -41,7 +44,7 @@ export function usePosts(userId = null) {
 		} finally {
 			setLoading(false);
 		}
-	}, [userId]);
+	}, [searchQuery, userId]);
 
 	useEffect(() => {
 		fetchPosts();

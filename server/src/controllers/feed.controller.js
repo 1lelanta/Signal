@@ -3,9 +3,23 @@ import Post from "../models/Post.model.js";
 export const getFeed = async(req, res)=>{
     try {
         const hasPaginationQuery = req.query.page !== undefined || req.query.limit !== undefined;
+        const rawQuery = String(req.query.q || "").trim();
+        const searchRegex = rawQuery ? new RegExp(rawQuery, "i") : null;
+        const filter = {
+            isPublished: true,
+            ...(searchRegex
+                ? {
+                      $or: [
+                          { title: searchRegex },
+                          { content: searchRegex },
+                          { tags: searchRegex },
+                      ],
+                  }
+                : {}),
+        };
 
         if (!hasPaginationQuery) {
-            const posts = await Post.find({isPublished:true})
+            const posts = await Post.find(filter)
             .sort({depthScore:-1})
             .populate("author", "username reputationScore avatar");
 
@@ -17,12 +31,12 @@ export const getFeed = async(req, res)=>{
         const skip = (page - 1) * limit;
 
         const [items, total] = await Promise.all([
-            Post.find({ isPublished: true })
+            Post.find(filter)
                 .sort({ depthScore: -1 })
                 .skip(skip)
                 .limit(limit)
                 .populate("author", "username reputationScore avatar"),
-            Post.countDocuments({ isPublished: true }),
+            Post.countDocuments(filter),
         ]);
 
         return res.json({

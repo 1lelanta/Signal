@@ -1,9 +1,12 @@
 import PostComposer from "../components/post/postComposer";
 import PostList from "../components/post/PostList";
 import { usePosts } from "../features/posts/usePosts";
+import { useSearchParams } from "react-router-dom";
 
 export default function Home() {
-  const { posts, loading, createPost, hasMore, loadingMore, loadMore } = usePosts();
+  const [searchParams] = useSearchParams();
+  const q = searchParams.get("q") || "";
+  const { posts, loading, createPost, hasMore, loadingMore, loadMore } = usePosts(null, q);
 
   return (
     <div className="w-full space-y-6 lg:max-w-4xl lg:mx-auto 2xl:max-w-5xl">
