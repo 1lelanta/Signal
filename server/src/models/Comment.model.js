@@ -25,7 +25,13 @@ const commentSchema = new mongoose.Schema(
         },
         content:{
             type:String,
-            required:true,
+            default:"",
+            trim:true,
+        },
+        imageUrl:{
+            type:String,
+            default:null,
+            trim:true,
         },
         depthScore:{
             type:Number,

@@ -32,7 +32,14 @@ const CommentItem = ({
                 </button>
 
             </div>
-            <p className="mt-2 text-sm break-words">{comment.text}</p>
+                        <p className="mt-2 text-sm break-words">{comment.content || ""}</p>
+                        {comment.imageUrl && (
+                                <img
+                                    src={comment.imageUrl}
+                                    alt="Comment"
+                                    className="mt-2 w-full max-h-72 object-cover rounded-lg border border-slate-700"
+                                />
+                        )}
             <button onClick={()=>setShowReply(!showReply)}
                 className="text-xs text-blue-400 mt-2">
                     reply

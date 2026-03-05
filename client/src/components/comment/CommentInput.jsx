@@ -4,12 +4,20 @@ import Button from "../ui/Button";
 
 const CommentInput = ({onSubmit, parentId = null})=>{
     const [text, setText] = useState("");
+    const [imageFile, setImageFile] = useState(null);
 
     const handleSubmit = (e)=>{
         e.preventDefault();
-        if(!text.trim()) return;
+        if(!text.trim() && !imageFile) return;
 
-        onSubmit(text, parentId);
+        onSubmit(text, parentId, imageFile);
+        setText("");
+        setImageFile(null);
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files?.[0] || null;
+        setImageFile(file);
     };
 
     return(
@@ -28,6 +36,24 @@ const CommentInput = ({onSubmit, parentId = null})=>{
                 >
                     Post
                 </Button>
+            </div>
+
+            <div className="mt-2 flex items-center justify-between gap-2">
+                <label className="inline-flex cursor-pointer items-center gap-2 text-xs text-slate-400 hover:text-slate-200">
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        className="hidden"
+                    />
+                    Add image
+                </label>
+
+                {imageFile && (
+                    <span className="truncate text-xs text-slate-300 max-w-[200px]">
+                        {imageFile.name}
+                    </span>
+                )}
             </div>
 
         </form>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getCommentsByPost, createComment,deleteComment } from "./commentAPI";
+import { getCommentsByPost, createComment, deleteComment, uploadCommentImage } from "./commentAPI";
 
 import socket from "../../services/socket"
 
@@ -20,13 +20,24 @@ export const useComments = (postId)=>{
         }
     };
 
-    const addComment = async(text, parentId=null)=>{
+    const addComment = async(content, parentId=null, imageFile=null)=>{
         try {
-            const newComment = await createComment({
-                postId,
-                text,
-                parentId
+            let imageUrl = null;
+
+            if (imageFile) {
+                const uploaded = await uploadCommentImage(imageFile);
+                imageUrl = uploaded?.imageUrl || null;
+            }
+
+            const newComment = await createComment(postId, {
+                content,
+                parentCommentId: parentId,
+                imageUrl,
             });
+
+            if (newComment?._id) {
+                setComments((prev) => [...prev, newComment]);
+            }
             
         } catch (err) {
             console.error(err);
