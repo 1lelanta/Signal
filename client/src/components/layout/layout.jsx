@@ -1,9 +1,12 @@
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
+import { useTheme } from "../../app/themeContext";
 
 const Layout = ({ children }) => {
+  const { isWarm } = useTheme();
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200">
+    <div className={`min-h-screen ${isWarm ? "bg-stone-100 text-slate-900" : "bg-slate-950 text-slate-200"}`}>
       <Navbar />
 
       <div className="mx-auto flex w-full max-w-screen-2xl">
