@@ -63,14 +63,30 @@ const Navbar = () => {
           <label htmlFor="nav-search" className="sr-only">
             Search posts
           </label>
-          <input
-            id="nav-search"
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search"
-            className="w-full rounded-md border border-slate-700 px-3 py-1.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-purple-500"
-          />
+          <div className="relative w-full">
+            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                className="h-4 w-4"
+                aria-hidden="true"
+              >
+                <circle cx="11" cy="11" r="7" />
+                <line x1="16.65" y1="16.65" x2="21" y2="21" />
+              </svg>
+            </span>
+            <input
+              id="nav-search"
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search"
+              className="w-full rounded-md border border-slate-700 pl-10 pr-3 py-1.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-purple-500"
+            />
+          </div>
         </form>
 
         <div className="flex min-w-0 items-center gap-3 sm:gap-5">
