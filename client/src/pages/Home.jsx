@@ -9,15 +9,14 @@ export default function Home() {
   const { posts, loading, createPost, hasMore, loadingMore, loadMore } = usePosts(null, q);
 
   return (
-    <div className="w-full lg:max-w-4xl lg:mx-auto 2xl:max-w-5xl h-[calc(100vh-9rem)] flex flex-col gap-6">
+    <div className="w-full lg:max-w-4xl lg:mx-auto 2xl:max-w-5xl h-[calc(100vh-9rem)]">
+      <div className="h-full overflow-y-auto no-scrollbar space-y-5">
+        {/* Create Post */}
+        <PostComposer onSubmit={createPost} />
 
-      {/* Create Post */}
-      <PostComposer onSubmit={createPost} />
-
-      {/* Feed */}
-      <div className="flex-1 overflow-y-auto pr-1">
+        {/* Feed */}
         {loading ? (
-          <div className="text-center py-10">Loading posts...</div>
+          <div className="text-center py-10 text-sm text-slate-400">Loading posts...</div>
         ) : (
           <PostList
             posts={posts}
@@ -27,7 +26,6 @@ export default function Home() {
           />
         )}
       </div>
-
     </div>
   );
 }
