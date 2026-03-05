@@ -92,6 +92,13 @@ const Sidebar = () => {
                 {user?.username || "User"}
               </p>
               <p
+                className={`truncate text-xs ${
+                  isWarm ? "text-stone-600" : "text-slate-500"
+                }`}
+              >
+                @{user?.username || "user"}
+              </p>
+              <p
                 className={`mt-1 line-clamp-2 text-xs ${
                   isWarm ? "text-slate-600" : "text-slate-400"
                 }`}
