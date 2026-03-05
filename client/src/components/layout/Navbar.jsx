@@ -6,30 +6,10 @@ import { useReputation } from "../../features/reputation/useReputation";
 import ReputationBadge from "../reputation/ReputationBadge";
 import { useTheme } from "../../app/themeContext";
 
-const getUserInitials = (user) => {
-  const fullName =
-    user?.name ||
-    [user?.firstName, user?.lastName].filter(Boolean).join(" ") ||
-    user?.username ||
-    "U";
-
-  const parts = String(fullName)
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean);
-
-  if (parts.length >= 2) {
-    return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
-  }
-
-  return parts[0]?.slice(0, 2).toUpperCase() || "U";
-};
-
 const Navbar = () => {
   const { user, logout } = useAuth();
   const { score } = useReputation(user?._id);
   const { isWarm, toggleTheme } = useTheme();
-  const initials = getUserInitials(user);
   const navigate = useNavigate();
   const location = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
