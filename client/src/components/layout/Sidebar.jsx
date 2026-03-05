@@ -1,14 +1,17 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../features/auth/useAuth";
+import { useReputation } from "../../features/reputation/useReputation";
 import { getUnreadMessagesCount } from "../../features/messages/messagesAPI";
 import socket from "../../services/socket";
 import { useTheme } from "../../app/themeContext";
+import ReputationBadge from "../reputation/ReputationBadge";
 
 const linkBase = "block px-4 py-2 rounded-md text-sm transition";
 
 const Sidebar = () => {
   const { user } = useAuth();
+  const { score } = useReputation(user?._id);
   const { isWarm } = useTheme();
   const location = useLocation();
   const userId = user?._id || user?.id;
@@ -98,6 +101,9 @@ const Sidebar = () => {
               >
                 @{user?.username || "user"}
               </p>
+              <div className="mt-1">
+                <ReputationBadge score={score} />
+              </div>
               <p
                 className={`mt-1 line-clamp-2 text-xs ${
                   isWarm ? "text-slate-600" : "text-slate-400"
