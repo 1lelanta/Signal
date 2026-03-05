@@ -59,7 +59,7 @@ const Navbar = () => {
           SIGNAL
         </Link>
 
-        <form onSubmit={handleSubmitSearch} className="hidden md:block flex-1 max-w-md">
+        <form onSubmit={handleSubmitSearch} className="hidden md:flex flex-1 max-w-md items-center gap-2">
           <label htmlFor="nav-search" className="sr-only">
             Search posts
           </label>
@@ -71,6 +71,12 @@ const Navbar = () => {
             placeholder="Search posts"
             className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-1.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-purple-500"
           />
+          <button
+            type="submit"
+            className="rounded-md border border-slate-700 bg-slate-900 px-3 py-1.5 text-sm font-medium text-slate-200 hover:border-purple-500 transition-colors"
+          >
+            Search
+          </button>
         </form>
 
         <div className="flex min-w-0 items-center gap-3 sm:gap-5">

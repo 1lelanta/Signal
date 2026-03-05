@@ -1,10 +1,13 @@
 import Post from "../models/Post.model.js";
 
+const escapeRegex = (value = "") => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 export const getFeed = async(req, res)=>{
     try {
         const hasPaginationQuery = req.query.page !== undefined || req.query.limit !== undefined;
-        const rawQuery = String(req.query.q || "").trim();
-        const searchRegex = rawQuery ? new RegExp(rawQuery, "i") : null;
+        const rawQuery = String(req.query.q || "").trim().slice(0, 100);
+        const safeQuery = escapeRegex(rawQuery);
+        const searchRegex = safeQuery ? new RegExp(safeQuery, "i") : null;
         const filter = {
             isPublished: true,
             ...(searchRegex
