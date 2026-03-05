@@ -152,7 +152,7 @@ const createOrUpdateUsers = async () => {
         trustLevel: item.trustLevel,
       },
       {
-        new: true,
+        returnDocument: "after",
         upsert: true,
         setDefaultsOnInsert: true,
       }
