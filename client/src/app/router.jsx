@@ -5,6 +5,7 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Profile from "../pages/Profile";
+import ProfileView from "../pages/ProfileView";
 import PostDetails from "../pages/PostDetails";
 import Notifications from "../pages/Notifications";
 import Reputation from "../pages/Reputation";
@@ -39,6 +40,17 @@ const Router = () => {
         <Route path="/explore" element={<Layout><Home /></Layout>} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
+        <Route
+          path="/profile/:id"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <ProfileView />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/profile"
