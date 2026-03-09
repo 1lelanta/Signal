@@ -200,21 +200,6 @@ const Sidebar = () => {
           </span>
         </NavLink>
 
-        <NavLink
-          to="/dashboard"
-          className={({ isActive }) =>
-            `${linkBase} ${
-              isActive
-                ? "bg-purple-600 text-white"
-                : isWarm
-                ? "text-slate-600 hover:bg-stone-200"
-                : "text-slate-400 hover:bg-slate-800"
-            }`
-          }
-        >
-          Dashboard
-        </NavLink>
-
         {user?.trustLevel === "moderator" && (
           <NavLink
             to="/admin"
