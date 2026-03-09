@@ -3,12 +3,14 @@ import { useParams } from "react-router-dom";
 import { getUserProfile } from "../features/users/profileAPI";
 import { useReputation } from "../features/reputation/useReputation";
 import PostList from "../components/post/PostList";
+import { usePosts } from "../features/posts/usePosts";
 
 const ProfileView = () => {
   const { id } = useParams();
   const [target, setTarget] = useState(null);
   const [loading, setLoading] = useState(true);
   const { score } = useReputation(id);
+  const { posts, loading: postsLoading } = usePosts(id);
 
   useEffect(() => {
     const load = async () => {
@@ -46,7 +48,7 @@ const ProfileView = () => {
         </div>
       </div>
 
-      <PostList postsOwnerId={id} />
+      <PostList posts={posts || []} />
     </div>
   );
 };
