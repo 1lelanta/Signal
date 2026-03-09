@@ -13,6 +13,7 @@ import Messages from "../pages/Messages";
 import NotFound from "../pages/NotFound";
 import Layout from "../components/layout/layout";
 import Admin from "../pages/Admin";
+import AdminReports from "../pages/AdminReports";
 
 const ProtectedRoute = ({ children, roles }) => {
   const { user, loading } = useAuth();
@@ -113,6 +114,17 @@ const Router = () => {
             <ProtectedRoute roles={["moderator"]}>
               <Layout>
                 <Admin />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/reports"
+          element={
+            <ProtectedRoute roles={["moderator"]}>
+              <Layout>
+                <AdminReports />
               </Layout>
             </ProtectedRoute>
           }
