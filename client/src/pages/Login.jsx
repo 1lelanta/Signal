@@ -46,6 +46,14 @@ const Login = () => {
     }
   };
 
+  // Demo credentials to help guests
+  const DEMO_ADMIN = { email: "admin-demo@example.com", password: "Password123!" };
+  const DEMO_USER = { email: "demo-user@example.com", password: "Password123!" };
+
+  const useDemo = (creds) => {
+    setForm({ email: creds.email, password: creds.password });
+  };
+
   return (
     <div
       className={`min-h-screen flex items-center justify-center p-4 ${
@@ -107,6 +115,26 @@ const Login = () => {
             {loading ? "Logging in..." : "Log In"}
           </Button>
         </form>
+
+        <div className="mt-6 p-3 rounded-md bg-slate-800/60 text-sm">
+          <div className="flex items-center justify-between mb-2">
+            <strong className="text-slate-100">Demo accounts</strong>
+            <div className="flex gap-2">
+              <button type="button" onClick={()=>useDemo(DEMO_USER)} className="text-xs px-2 py-1 bg-slate-700 rounded">Use Demo User</button>
+              <button type="button" onClick={()=>useDemo(DEMO_ADMIN)} className="text-xs px-2 py-1 bg-amber-700 rounded">Use Admin</button>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-300">
+            <div>
+              <div className="text-xs text-slate-400">User</div>
+              <div className="text-sm">{DEMO_USER.email} / {DEMO_USER.password}</div>
+            </div>
+            <div>
+              <div className="text-xs text-slate-400">Admin</div>
+              <div className="text-sm">{DEMO_ADMIN.email} / {DEMO_ADMIN.password}</div>
+            </div>
+          </div>
+        </div>
 
         <p className="text-center text-sm text-slate-300 mt-8">
           Don't have an account?{" "}
