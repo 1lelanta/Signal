@@ -2,13 +2,16 @@ import cors from 'cors'
 
 import { ENV } from './env.js'
 
-const allowedOrigins = [
-  ENV.CLIENT_URL,
-  "http://localhost:5173",
-  "http://127.0.0.1:5173",
-  "http://localhost:5174",
-  "http://127.0.0.1:5174",
+const allowedOriginsRaw = [
+    ENV.CLIENT_URL,
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:5174",
+    "http://127.0.0.1:5174",
 ].filter(Boolean);
+
+// Only allow http:// origins (explicitly block https)
+const allowedOrigins = allowedOriginsRaw.filter((u) => u.startsWith("http://"));
 
 const corsOptions = {
     origin(origin, callback) {
@@ -18,7 +21,7 @@ const corsOptions = {
 
         const isAllowed =
             allowedOrigins.includes(origin) ||
-            /^https?:\/\/(localhost|127\.0\.0\.1):(5173|5174|5175)$/.test(origin);
+            /^http:\/\/(localhost|127\.0\.0\.1):(5173|5174|5175)$/.test(origin);
 
         if (isAllowed) {
             return callback(null, true);
