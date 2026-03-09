@@ -13,7 +13,7 @@ import NotFound from "../pages/NotFound";
 import Layout from "../components/layout/layout";
 import Admin from "../pages/Admin";
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children, roles }) => {
   const { user, loading } = useAuth();
   const location = useLocation();
 
@@ -21,6 +21,11 @@ const ProtectedRoute = ({ children }) => {
 
   if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  if (roles && !roles.includes(user.trustLevel)) {
+    // user is authenticated but not authorized for this route
+    return <Navigate to="/" replace />;
   }
 
   return children;
@@ -93,8 +98,20 @@ const Router = () => {
         <Route
           path="/admin"
           element={
+            <ProtectedRoute roles={["moderator"]}>
+              <Layout>
+                <Admin />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard"
+          element={
             <ProtectedRoute>
               <Layout>
+                {/* User dashboard - general users will see this */}
                 <Admin />
               </Layout>
             </ProtectedRoute>

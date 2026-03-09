@@ -25,7 +25,17 @@ const Login = () => {
       const data = await loginUser(form);
       // API returns { success, token, user }
       login(data.user, data.token);
-      navigate(from, { replace: true });
+      // If redirected from a protected route, go back there. Otherwise go to role-based dashboard
+      const isGenericFrom = ["/", "/login", "/register"].includes(from);
+      if (isGenericFrom) {
+        if (data.user?.trustLevel === "moderator") {
+          navigate("/admin", { replace: true });
+        } else {
+          navigate("/dashboard", { replace: true });
+        }
+      } else {
+        navigate(from, { replace: true });
+      }
     } catch (err) {
       setError(
         err.response?.data?.message || "Login failed. Please check your credentials."
