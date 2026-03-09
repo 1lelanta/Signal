@@ -3,7 +3,10 @@ import cors from 'cors'
 import { ENV } from './env.js'
 
 const allowedOriginsRaw = [
+    // include any individual client URL set in ENV.CLIENT_URL
     ENV.CLIENT_URL,
+    // include list of client URLs if provided via CLIENT_URLS
+    ...(ENV.CLIENT_URLS || []),
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:5174",
