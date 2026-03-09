@@ -31,7 +31,8 @@ const Login = () => {
         if (data.user?.trustLevel === "moderator") {
           navigate("/admin", { replace: true });
         } else {
-          navigate("/dashboard", { replace: true });
+          // regular users (including demo user) go to the normal home feed
+          navigate("/", { replace: true });
         }
       } else {
         navigate(from, { replace: true });
