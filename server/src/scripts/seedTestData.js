@@ -199,6 +199,13 @@ const run = async () => {
 
     console.log(`Seeded ${usersByUsername.size} users and ${seedPosts.length} posts.`);
     console.log("Image fields saved to User.avatar and Post.imageUrl.");
+    // Print a demo user's credentials (useful for local development/testing)
+    const demoUser = seedUsers.find((u) => u.username === "test_alice") || seedUsers[0];
+    if (demoUser) {
+      console.log("Demo credentials (local only):");
+      console.log(`Email: ${demoUser.email}`);
+      console.log(`Password: ${demoUser.password}`);
+    }
   } catch (error) {
     console.error("Seeding failed:", error.message);
     process.exitCode = 1;
