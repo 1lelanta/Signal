@@ -56,15 +56,16 @@ const Login = () => {
 
   return (
     <div
-      className={`min-h-screen flex items-center justify-center p-4 ${
-        isWarm ? "bg-stone-100 text-slate-900" : "bg-slate-950 text-white"
+      className={`min-h-screen flex items-center justify-center p-6 ${
+        isWarm ? "bg-gradient-to-br from-stone-50 to-stone-100 text-slate-900" : "bg-gradient-to-br from-slate-950 to-slate-900 text-white"
       }`}
     >
-      <div className="w-full max-w-md bg-slate-900 p-6 sm:p-8 rounded-xl shadow-lg">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-indigo-400">Signal</h1>
-          <p className="text-slate-300 mt-2">Welcome back! Please log in.</p>
-        </div>
+      <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+        <div className={`rounded-xl shadow-xl p-8 ${isWarm ? 'bg-white' : 'bg-slate-900'}`}>
+          <div className="text-center mb-6">
+            <h1 className="text-3xl font-extrabold text-indigo-500">Signal</h1>
+            <p className="text-sm mt-2 text-slate-400">A demo workspace — sign in to continue</p>
+          </div>
 
         {error && (
           <p className="text-red-400 text-center mb-4 bg-red-900/20 p-3 rounded-md">
@@ -109,32 +110,46 @@ const Login = () => {
           <Button
             type="submit"
             disabled={loading}
-            className="!bg-blue-600 hover:!bg-blue-700 !text-white border-0"
-            style={{ backgroundColor: "#2563eb", color: "#ffffff" }}
+            className="w-full !bg-blue-600 hover:!bg-blue-700 !text-white shadow-sm"
           >
             {loading ? "Logging in..." : "Log In"}
           </Button>
         </form>
-
-        <div className="mt-6 p-3 rounded-md bg-slate-800/60 text-sm">
-          <div className="flex items-center justify-between mb-2">
-            <strong className="text-slate-100">Demo accounts</strong>
-            <div className="flex gap-2">
-              <button type="button" onClick={()=>useDemo(DEMO_USER)} className="text-xs px-2 py-1 bg-slate-700 rounded">Use Demo User</button>
-              <button type="button" onClick={()=>useDemo(DEMO_ADMIN)} className="text-xs px-2 py-1 bg-amber-700 rounded">Use Admin</button>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-300">
-            <div>
-              <div className="text-xs text-slate-400">User</div>
-              <div className="text-sm">{DEMO_USER.email} / {DEMO_USER.password}</div>
-            </div>
-            <div>
-              <div className="text-xs text-slate-400">Admin</div>
-              <div className="text-sm">{DEMO_ADMIN.email} / {DEMO_ADMIN.password}</div>
-            </div>
-          </div>
         </div>
+
+        <aside className={`rounded-xl shadow-lg p-6 ${isWarm ? 'bg-slate-50' : 'bg-slate-800'}`}>
+          <div className="flex items-start justify-between">
+            <div>
+              <h3 className="text-lg font-semibold">Demo accounts</h3>
+              <p className="mt-1 text-sm text-slate-400">Quick sign-in for exploration</p>
+            </div>
+            <div className="text-3xl">✨</div>
+          </div>
+
+          <div className="mt-4 grid gap-3">
+            <div className="flex items-center justify-between rounded-md p-3 bg-gradient-to-r from-slate-700/30 to-transparent">
+              <div>
+                <div className="text-xs text-slate-300">User</div>
+                <div className="font-medium">{DEMO_USER.email}</div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button onClick={() => useDemo(DEMO_USER)} className="px-3 py-1 bg-slate-700 text-white rounded-md text-sm">Autofill</button>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between rounded-md p-3 bg-gradient-to-r from-amber-600/10 to-transparent">
+              <div>
+                <div className="text-xs text-slate-400">Admin</div>
+                <div className="font-medium">{DEMO_ADMIN.email}</div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button onClick={() => useDemo(DEMO_ADMIN)} className="px-3 py-1 bg-amber-600 text-white rounded-md text-sm">Autofill</button>
+              </div>
+            </div>
+
+            <div className="text-xs text-slate-400 mt-2">Use these demo accounts to explore the app. Password for both is <span className="font-mono">Password123!</span></div>
+          </div>
+        </aside>
 
         <p className="text-center text-sm text-slate-300 mt-8">
           Don't have an account?{" "}
