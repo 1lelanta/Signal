@@ -20,6 +20,10 @@ export const ENV = {
     MONGO_URI: process.env.MONGO_URI,
     JWT_SECRET:process.env.JWT_SECRET,
     CLIENT_URL:process.env.CLIENT_URL,
+    // allow multiple client URLs via comma-separated env var CLIENT_URLS
+    CLIENT_URLS: process.env.CLIENT_URLS
+        ? process.env.CLIENT_URLS.split(',').map(s=>s.trim()).filter(Boolean)
+        : (process.env.CLIENT_URL ? [process.env.CLIENT_URL] : []),
     SUPABASE_URL: process.env.SUPABASE_URL,
     SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
     SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,
