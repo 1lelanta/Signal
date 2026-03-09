@@ -25,3 +25,8 @@ export const toggleFollowUser = async (userId) => {
   const res = await api.post(`/users/${userId}/follow`);
   return res.data;
 };
+
+export const getUserProfile = async (userId) => {
+  const res = await api.get(`/users/${userId}`);
+  return res.data;
+};
