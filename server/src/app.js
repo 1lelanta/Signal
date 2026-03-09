@@ -10,6 +10,7 @@ import feedRoutes from "./routes/feed.routes.js";
 import reputationRoutes from "./routes/reputation.routes.js";
 import messageRoutes from "./routes/message.routes.js";
 import notificationRoutes from "./routes/notification.routes.js";
+import adminRoutes from "./routes/admin.routes.js";
 
 
 const app = express();
@@ -30,6 +31,7 @@ app.use("/api/feed", feedRoutes);
 app.use("/api/reputation", reputationRoutes)
 app.use("/api/messages", messageRoutes)
 app.use("/api/notifications", notificationRoutes)
+app.use("/api/admin", adminRoutes);
 
 app.use(errorHandler);
 export default app;
