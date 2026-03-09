@@ -1,4 +1,4 @@
-import api from "./axios".default || require("../services/axios").default;
+import api from "./axios";
 
 export const createReport = async (payload) => {
   const res = await api.post("/reports", payload);
