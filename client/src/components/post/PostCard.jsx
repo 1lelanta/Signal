@@ -4,6 +4,7 @@ import Button from "../ui/Button";
 import api from "../../services/axios";
 import { useAuth } from "../../features/auth/useAuth";
 import { getFollowStatus, toggleFollowUser } from "../../features/users/profileAPI";
+import ReportButton from "../report/ReportButton";
 
 const getInitials = (name = "User") => {
     const parts = String(name).trim().split(/\s+/).filter(Boolean);
@@ -335,6 +336,8 @@ const PostCard = ({post})=>{
                     >
                         Comment
                     </button>
+
+                    <ReportButton target={{ type: "post", id: post._id }} />
                 </div>
 
                 {showCommentInput && (
