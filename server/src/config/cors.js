@@ -10,8 +10,8 @@ const allowedOriginsRaw = [
     "http://127.0.0.1:5174",
 ].filter(Boolean);
 
-// Only allow http:// origins (explicitly block https)
-const allowedOrigins = allowedOriginsRaw.filter((u) => u.startsWith("http://"));
+// Allow both http and https origins (Vercel and other https hosts)
+const allowedOrigins = allowedOriginsRaw; // keep any provided origins
 
 const corsOptions = {
     origin(origin, callback) {
@@ -21,7 +21,7 @@ const corsOptions = {
 
         const isAllowed =
             allowedOrigins.includes(origin) ||
-            /^http:\/\/(localhost|127\.0\.0\.1):(5173|5174|5175)$/.test(origin);
+            /^https?:\/\/(localhost|127\.0\.0\.1):(5173|5174|5175)$/.test(origin);
 
         if (isAllowed) {
             return callback(null, true);
