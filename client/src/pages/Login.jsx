@@ -25,15 +25,17 @@ const Login = () => {
       const data = await loginUser(form);
       // API returns { success, token, user }
       login(data.user, data.token);
-      // If redirected from a protected route, go back there. Otherwise go to role-based dashboard
+      // If the user is a moderator, always send them to the admin dashboard
+      if (String(data.user?.trustLevel || "").toLowerCase() === "moderator") {
+        navigate("/admin", { replace: true });
+        return;
+      }
+
+      // If redirected from a protected route, go back there. Otherwise go to home
       const isGenericFrom = ["/", "/login", "/register"].includes(from);
       if (isGenericFrom) {
-        if (String(data.user?.trustLevel || "").toLowerCase() === "moderator") {
-          navigate("/admin", { replace: true });
-        } else {
-          // regular users (including demo user) go to the normal home feed
-          navigate("/", { replace: true });
-        }
+        // regular users (including demo user) go to the normal home feed
+        navigate("/", { replace: true });
       } else {
         navigate(from, { replace: true });
       }
