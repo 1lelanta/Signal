@@ -247,7 +247,7 @@ const PostCard = ({post})=>{
         <div className="relative">
             <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-purple-500 to-pink-500 opacity-40 rounded-l-xl" />
 
-            <div className="ml-3 overflow-hidden bg-gradient-to-br from-slate-900/95 via-slate-800/80 to-slate-900/80 border border-slate-800 rounded-xl p-4 sm:p-5 hover:shadow-2xl hover:scale-[1.01] transform transition duration-300">
+            <div className="ml-3 overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border border-slate-800 rounded-xl p-4 sm:p-5 hover:shadow-2xl hover:scale-[1.01] transform transition duration-300 text-slate-100">
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3 mb-3">
                 <Link to={`/profile/${post.author._id}`} className="inline-flex items-center gap-2 min-w-0">
@@ -297,7 +297,7 @@ const PostCard = ({post})=>{
             {/* content */}
 
             <Link to={`/post/${post._id}`}>
-            <p className="text-slate-200 leading-relaxed text-sm mb-4 break-words">
+            <p className="text-slate-100 leading-relaxed text-sm mb-4 break-words">
                 {post.content}
             </p>
             {post.imageUrl && (
@@ -315,7 +315,7 @@ const PostCard = ({post})=>{
                         type="button"
                         onClick={handleLikeToggle}
                         disabled={liking}
-                        className={`text-sm font-medium transition ${liked ? "text-blue-400" : "text-slate-300 hover:text-blue-400"}`}
+                        className={`text-sm font-medium transition ${liked ? "text-blue-300" : "text-slate-200 hover:text-blue-300"}`}
                         aria-label="Like post"
                         title="Like"
                     >
@@ -326,7 +326,7 @@ const PostCard = ({post})=>{
                         type="button"
                         onClick={handleRepostToggle}
                         disabled={reposting}
-                        className={`text-sm font-medium transition ${reposted ? "text-green-400" : "text-slate-300 hover:text-green-400"}`}
+                        className={`text-sm font-medium transition ${reposted ? "text-green-300" : "text-slate-200 hover:text-green-300"}`}
                         aria-label="Repost"
                         title="Repost"
                     >
@@ -336,7 +336,7 @@ const PostCard = ({post})=>{
                     <button
                         type="button"
                         onClick={toggleComments}
-                        className="text-sm text-slate-300 hover:text-purple-400 font-medium"
+                        className="text-sm text-slate-200 hover:text-purple-300 font-medium"
                         aria-label="Toggle comment input"
                         title="Comment"
                     >
@@ -357,7 +357,7 @@ const PostCard = ({post})=>{
 
                             {showActionsMenu && (
                                 <div className="absolute right-0 mt-2 w-44 bg-slate-900 border border-slate-700 rounded-md p-2 shadow-lg z-20">
-                                    <div className="flex flex-col gap-2">
+                                    <div className="flex flex-col gap-2 text-slate-200">
                                         <ReportButton target={{ type: "post", id: post._id }} className="w-full justify-start" />
                                         <button onClick={() => { /* placeholder for other actions */ }} className="text-sm text-slate-200 text-left">Save</button>
                                     </div>
