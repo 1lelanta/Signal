@@ -28,7 +28,7 @@ const Login = () => {
       // If redirected from a protected route, go back there. Otherwise go to role-based dashboard
       const isGenericFrom = ["/", "/login", "/register"].includes(from);
       if (isGenericFrom) {
-        if (data.user?.trustLevel === "moderator") {
+        if (String(data.user?.trustLevel || "").toLowerCase() === "moderator") {
           navigate("/admin", { replace: true });
         } else {
           // regular users (including demo user) go to the normal home feed
