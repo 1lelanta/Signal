@@ -244,9 +244,12 @@ const PostCard = ({post})=>{
     const topLevelComments = comments.filter((comment) => !comment.parentComment);
 
     return(
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 sm:p-5 hover:border-purple-600/40 transition duration-300">
+        <div className="relative">
+            <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-purple-500 to-pink-500 opacity-40 rounded-l-xl" />
+
+            <div className="ml-3 overflow-hidden bg-gradient-to-br from-slate-900/95 via-slate-800/80 to-slate-900/80 border border-slate-800 rounded-xl p-4 sm:p-5 hover:shadow-2xl hover:scale-[1.01] transform transition duration-300">
             {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-3 mb-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3 mb-3">
                 <Link to={`/profile/${post.author._id}`} className="inline-flex items-center gap-2 min-w-0">
                     {post.author?.avatar ? (
                         <img
@@ -259,13 +262,15 @@ const PostCard = ({post})=>{
                             {getInitials(post.author?.username)}
                         </div>
                     )}
-                    <span className="text-sm font-medium text-slate-300 hover:text-purple-400 break-all">
-                        {post.author.username}
-                    </span>
+                    <div className="min-w-0">
+                      <div className="text-sm font-semibold text-slate-100 truncate">{post.author.username}</div>
+                      <div className="text-xs text-slate-400">{post.author?.headline || post.author?.role || ''}</div>
+                    </div>
                 </Link>
-                <p className="text-xs text-slate-500 sm:text-right">
-                    Reputation {post.author.reputationScore}
-                </p>
+                <div className="text-xs text-slate-400 sm:text-right">
+                    <div>Reputation <strong className="text-slate-200">{post.author.reputationScore}</strong></div>
+                    {post.createdAt && <div className="mt-1 text-xs text-slate-500">{new Date(post.createdAt).toLocaleString()}</div>}
+                </div>
             </div>
 
             {!!userId && String(userId) !== String(authorId) && (
@@ -304,8 +309,8 @@ const PostCard = ({post})=>{
             )}
             </Link>
 
-            <div className="mt-3 border-t border-slate-800 pt-3">
-                <div className="flex items-center gap-6 sm:gap-8 relative">
+            <div className="mt-3 border-t border-slate-800/60 pt-3">
+                <div className="flex items-center gap-4 sm:gap-6 relative">
                     <button
                         type="button"
                         onClick={handleLikeToggle}
@@ -337,32 +342,29 @@ const PostCard = ({post})=>{
                     >
                         Comment
                     </button>
+                    <div className="ml-auto flex items-center gap-2">
+                        <ReportButton target={{ type: "post", id: post._id }} className="ml-2" />
+                        <div className="relative">
+                            <button
+                                type="button"
+                                onClick={() => setShowActionsMenu((s) => !s)}
+                                className="text-slate-400 hover:text-slate-200 px-2 py-1 rounded-md"
+                                aria-label="More actions"
+                                title="More"
+                            >
+                                ⋯
+                            </button>
 
-                                        {/* Visible report button for testing/discovery */}
-                                        <div className="hidden sm:block">
-                                            <ReportButton target={{ type: "post", id: post._id }} className="ml-2" />
-                                        </div>
-
-                                        {/* Report button is tucked into a reveal menu to improve discoverability */}
-                                        <div className="relative">
-                                            <button
-                                                type="button"
-                                                onClick={() => setShowActionsMenu((s) => !s)}
-                                                className="text-slate-400 hover:text-slate-200 px-2 py-1 rounded-md"
-                                                aria-label="More actions"
-                                                title="More"
-                                            >
-                                                ⋯
-                                            </button>
-
-                                            {showActionsMenu && (
-                                                <div className="absolute right-0 mt-2 w-40 bg-slate-900 border border-slate-700 rounded-md p-2 shadow-lg z-20">
-                                                    <div className="flex flex-col gap-2">
-                                                        <ReportButton target={{ type: "post", id: post._id }} className="w-full justify-start" />
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </div>
+                            {showActionsMenu && (
+                                <div className="absolute right-0 mt-2 w-44 bg-slate-900 border border-slate-700 rounded-md p-2 shadow-lg z-20">
+                                    <div className="flex flex-col gap-2">
+                                        <ReportButton target={{ type: "post", id: post._id }} className="w-full justify-start" />
+                                        <button onClick={() => { /* placeholder for other actions */ }} className="text-sm text-slate-200 text-left">Save</button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </div>
 
                 {showCommentInput && (
