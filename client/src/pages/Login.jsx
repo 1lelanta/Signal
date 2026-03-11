@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../features/auth/useAuth";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
-import { loginUser } from "../features/auth/authAPI";
+import { loginUser, getCurrentUser } from "../features/auth/authAPI";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../app/themeContext";
 
@@ -24,7 +24,21 @@ const Login = () => {
     try {
       const data = await loginUser(form);
       // API returns { success, token, user }
+      // persist token and set immediate user placeholder
       login(data.user, data.token);
+
+      // fetch authoritative current user after token stored (handles partial login responses)
+      try {
+        const me = await getCurrentUser();
+        if (me?.user) {
+          // update context with authoritative user
+          // use the same login function to ensure axios headers are set
+          login(me.user, data.token);
+        }
+      } catch (e) {
+        // continue with the original response if /auth/me fails
+        console.warn("Could not fetch /auth/me after login", e?.message || e);
+      }
       // If the user is a moderator, always send them to the admin dashboard
       if (String(data.user?.trustLevel || "").toLowerCase() === "moderator") {
         navigate("/admin", { replace: true });
