@@ -417,14 +417,31 @@ const PostCard = ({post})=>{
                                         placeholder="Comment..."
                                         className="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 pr-20"
                                     />
-                                    <Button
-                                        type="submit"
-                                        disabled={isReplySubmitting || !replyText.trim()}
-                                        className="!px-3 !py-1 absolute right-2 top-1/2 -translate-y-1/2"
-                                    >
-                                        {isReplySubmitting ? "Posting..." : "Comment"}
-                                    </Button>
+                                        <Button
+                                            type="submit"
+                                            disabled={isReplySubmitting || !replyText.trim()}
+                                            className="!px-3 !py-1 absolute right-2 top-1/2 -translate-y-1/2"
+                                        >
+                                            {isReplySubmitting ? "Posting..." : "Comment"}
+                                        </Button>
+                                    </div>
                                 </div>
+                            </div>
+                        </form>
+                    ) : (
+                        <p className="text-xs text-slate-400 mt-2">Log in to comment on this post.</p>
+                    )
+                )}
+
+                {showCommentInput && (
+                    <>
+                        {commentMessage && <p className="text-xs text-slate-300 mt-2">{commentMessage}</p>}
+
+                        <div className="mt-3 space-y-2">
+                            {commentsLoading ? (
+                                <p className="text-xs text-slate-400">Loading comments...</p>
+                            ) : topLevelComments.length > 0 ? (
+                                topLevelComments.map((comment) => renderCommentItem(comment))
                             ) : (
                                 <p className="text-xs text-slate-400">No comments yet.</p>
                             )}
