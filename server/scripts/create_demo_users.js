@@ -15,7 +15,7 @@ if (!MONGO_URI) {
   process.exit(1);
 }
 
-const ADMIN_EMAIL = process.env.DEMO_ADMIN_EMAIL || "admin-demo@example.com";
+const ADMIN_EMAIL = process.env.DEMO_ADMIN_EMAIL || "admin2-demo@example.com";
 const USER_EMAIL = process.env.DEMO_USER_EMAIL || "demo-user@example.com";
 const PASSWORD = process.env.DEMO_PASSWORD || "Password123!";
 
@@ -41,7 +41,7 @@ async function run() {
     await mongoose.connect(MONGO_URI, {});
     console.log("Connected to MongoDB");
 
-    const adminRes = await createIfNotExists(ADMIN_EMAIL, "admin-demo", "moderator");
+    const adminRes = await createIfNotExists(ADMIN_EMAIL, "admin2-demo", "moderator");
     const userRes = await createIfNotExists(USER_EMAIL, "demo-user", "trusted");
 
     console.log("Demo accounts summary:");
