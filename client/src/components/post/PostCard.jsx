@@ -391,39 +391,40 @@ const PostCard = ({post})=>{
                                 </div>
 
                                 <div className="flex-1">
-                                    <textarea
-                                        value={commentText}
-                                        onChange={(e) => setCommentText(e.target.value)}
-                                        placeholder="Share your thoughts..."
-                                        rows={2}
-                                        className="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
-                                    />
+                                    <div className="relative">
+                                        <textarea
+                                            value={commentText}
+                                            onChange={(e) => setCommentText(e.target.value)}
+                                            placeholder="Comment..."
+                                            rows={2}
+                                            className="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none pr-20"
+                                        />
 
-                                    <div className="mt-2 flex items-center justify-end gap-2">
                                         <Button
                                             type="submit"
                                             disabled={isSubmitting || !commentText.trim()}
-                                            className="!px-3 !py-1.5"
+                                            className="!px-3 !py-1.5 absolute right-2 bottom-2"
+                                            aria-label="Submit comment"
                                         >
-                                            {isSubmitting ? "Posting..." : "Post"}
+                                            {isSubmitting ? "Posting..." : "Comment"}
                                         </Button>
                                     </div>
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        value={replyText}
+                                        onChange={(e) => setReplyText(e.target.value)}
+                                        placeholder="Comment..."
+                                        className="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 pr-20"
+                                    />
+                                    <Button
+                                        type="submit"
+                                        disabled={isReplySubmitting || !replyText.trim()}
+                                        className="!px-3 !py-1 absolute right-2 top-1/2 -translate-y-1/2"
+                                    >
+                                        {isReplySubmitting ? "Posting..." : "Comment"}
+                                    </Button>
                                 </div>
-                            </div>
-                        </form>
-                    ) : (
-                        <p className="text-xs text-slate-400 mt-2">Log in to comment on this post.</p>
-                    )
-                )}
-                {showCommentInput && (
-                    <>
-                        {commentMessage && <p className="text-xs text-slate-300 mt-2">{commentMessage}</p>}
-
-                        <div className="mt-3 space-y-2">
-                            {commentsLoading ? (
-                                <p className="text-xs text-slate-400">Loading comments...</p>
-                            ) : topLevelComments.length > 0 ? (
-                                topLevelComments.map((comment) => renderCommentItem(comment))
                             ) : (
                                 <p className="text-xs text-slate-400">No comments yet.</p>
                             )}
