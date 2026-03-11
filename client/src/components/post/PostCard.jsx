@@ -416,6 +416,7 @@ const PostCard = ({post})=>{
 
             </div>
 
+            </div>
         </div>
     )
 }
