@@ -7,12 +7,12 @@ export default function ReportButton({ target, className = "" }) {
   return (
     <>
       <button
-        className={`inline-flex items-center gap-2 px-2 py-1 rounded-md text-sm font-medium transition bg-slate-800 border border-slate-700 hover:bg-red-600/80 hover:text-white ${className}`}
+        className={`inline-flex items-center gap-2 px-2 py-1 rounded-md text-sm font-medium transition bg-slate-700 border border-slate-600 text-slate-100 hover:bg-red-600 hover:text-white ${className}`}
         onClick={() => setOpen(true)}
         aria-label="Report"
         title="Report"
       >
-        <span className="text-red-400">⚑</span>
+        <span className="text-red-300">⚑</span>
         <span className="hidden sm:inline">Report</span>
       </button>
 
