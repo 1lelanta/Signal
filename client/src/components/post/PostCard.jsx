@@ -41,6 +41,7 @@ const PostCard = ({post})=>{
     const [commentsLoaded, setCommentsLoaded] = useState(false);
     const [activeReplyId, setActiveReplyId] = useState(null);
     const [replyText, setReplyText] = useState("");
+    const [showActionsMenu, setShowActionsMenu] = useState(false);
 
     const loadFollowStatus = async () => {
         if (!userId || !authorId || String(userId) === String(authorId)) {
@@ -304,7 +305,7 @@ const PostCard = ({post})=>{
             </Link>
 
             <div className="mt-3 border-t border-slate-800 pt-3">
-                <div className="flex items-center gap-6 sm:gap-8">
+                <div className="flex items-center gap-6 sm:gap-8 relative">
                     <button
                         type="button"
                         onClick={handleLikeToggle}
@@ -337,7 +338,26 @@ const PostCard = ({post})=>{
                         Comment
                     </button>
 
-                    <ReportButton target={{ type: "post", id: post._id }} />
+                                        {/* Report button is tucked into a reveal menu to improve discoverability */}
+                                        <div className="relative">
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowActionsMenu((s) => !s)}
+                                                className="text-slate-400 hover:text-slate-200 px-2 py-1 rounded-md"
+                                                aria-label="More actions"
+                                                title="More"
+                                            >
+                                                ⋯
+                                            </button>
+
+                                            {showActionsMenu && (
+                                                <div className="absolute right-0 mt-2 w-40 bg-slate-900 border border-slate-700 rounded-md p-2 shadow-lg z-20">
+                                                    <div className="flex flex-col gap-2">
+                                                        <ReportButton target={{ type: "post", id: post._id }} className="w-full justify-start" />
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
                 </div>
 
                 {showCommentInput && (
