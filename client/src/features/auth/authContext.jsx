@@ -22,8 +22,13 @@ export const AuthProvider = ({ children }) => {
         api.defaults.headers.Authorization = `Bearer ${token}`;
         const data = await getCurrentUser();
         setUser(data.user);
+        // dev: log loaded user for debugging redirects
+        // eslint-disable-next-line no-console
+        console.debug("Auth: loaded user from /auth/me:", data.user);
       } catch (err) {
         setUser(null);
+        // eslint-disable-next-line no-console
+        console.debug("Auth: failed to load /auth/me", err?.message || err);
       } finally {
         setLoading(false);
       }
@@ -38,6 +43,9 @@ export const AuthProvider = ({ children }) => {
     api.defaults.headers.common = api.defaults.headers.common || {};
     api.defaults.headers.common.Authorization = `Bearer ${token}`;
     setUser(userData);
+    // dev: log when login sets user
+    // eslint-disable-next-line no-console
+    console.debug("Auth: login set user:", userData);
   };
 
   const logout = () => {
@@ -52,6 +60,9 @@ export const AuthProvider = ({ children }) => {
 
   const updateUser = (userData) => {
     setUser(userData);
+    // dev: log user updates
+    // eslint-disable-next-line no-console
+    console.debug("Auth: updateUser:", userData);
   };
 
   return (
