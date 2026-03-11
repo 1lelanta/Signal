@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { usePosts } from "../features/posts/usePosts";
 import CommentTree from "../components/comment/CommentTree";
+import ReportButton from "../components/report/ReportButton";
 
 const PostDetails = () => {
   const { postId } = useParams();
@@ -24,6 +25,10 @@ const PostDetails = () => {
             className="mt-4 w-full max-h-[32rem] object-cover rounded-lg border border-slate-700"
           />
         )}
+
+        <div className="mt-4">
+          <ReportButton target={{ type: "post", id: post._id }} />
+        </div>
       </div>
 
       <CommentTree postId={postId} />

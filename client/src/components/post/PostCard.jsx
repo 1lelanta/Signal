@@ -4,7 +4,6 @@ import Button from "../ui/Button";
 import api from "../../services/axios";
 import { useAuth } from "../../features/auth/useAuth";
 import { getFollowStatus, toggleFollowUser } from "../../features/users/profileAPI";
-import ReportButton from "../report/ReportButton";
 
 const getInitials = (name = "User") => {
     const parts = String(name).trim().split(/\s+/).filter(Boolean);
@@ -343,7 +342,6 @@ const PostCard = ({post})=>{
                         Comment
                     </button>
                     <div className="ml-auto flex items-center gap-2">
-                        <ReportButton target={{ type: "post", id: post._id }} className="ml-2" />
                         <div className="relative">
                             <button
                                 type="button"
@@ -358,7 +356,6 @@ const PostCard = ({post})=>{
                             {showActionsMenu && (
                                 <div className="absolute right-0 mt-2 w-44 bg-slate-900 border border-slate-700 rounded-md p-2 shadow-lg z-20">
                                     <div className="flex flex-col gap-2 text-slate-200">
-                                        <ReportButton target={{ type: "post", id: post._id }} className="w-full justify-start" />
                                         <button onClick={() => { /* placeholder for other actions */ }} className="text-sm text-slate-200 text-left">Save</button>
                                     </div>
                                 </div>
