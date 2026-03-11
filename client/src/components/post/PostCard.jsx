@@ -338,6 +338,11 @@ const PostCard = ({post})=>{
                         Comment
                     </button>
 
+                                        {/* Visible report button for testing/discovery */}
+                                        <div className="hidden sm:block">
+                                            <ReportButton target={{ type: "post", id: post._id }} className="ml-2" />
+                                        </div>
+
                                         {/* Report button is tucked into a reveal menu to improve discoverability */}
                                         <div className="relative">
                                             <button
