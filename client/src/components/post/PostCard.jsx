@@ -366,23 +366,35 @@ const PostCard = ({post})=>{
 
                 {showCommentInput && (
                     user ? (
-                        <form onSubmit={handleCommentSubmit} className="mt-2">
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    value={commentText}
-                                    onChange={(e) => setCommentText(e.target.value)}
-                                    placeholder="Write a comment..."
-                                    className="w-full bg-slate-800 border border-slate-700 rounded-md px-3 pr-20 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                />
-                                <Button
-                                    type="submit"
-                                    disabled={isSubmitting || !commentText.trim()}
-                                    className="!bg-blue-600 hover:!bg-blue-700 !text-white border-0 !px-3 !py-1.5 absolute right-1 top-1/2 -translate-y-1/2"
-                                    aria-label="Submit comment"
-                                >
-                                    {isSubmitting ? "..." : "Post"}
-                                </Button>
+                        <form onSubmit={handleCommentSubmit} className="mt-3">
+                            <div className="flex items-start gap-3">
+                                <div className="shrink-0">
+                                    {user?.avatar ? (
+                                        <img src={user.avatar} alt={user.username} className="h-9 w-9 rounded-full object-cover border border-slate-700" />
+                                    ) : (
+                                        <div className="h-9 w-9 rounded-full bg-slate-700 border border-slate-600 text-xs text-slate-200 font-semibold flex items-center justify-center">{getInitials(user?.username)}</div>
+                                    )}
+                                </div>
+
+                                <div className="flex-1">
+                                    <textarea
+                                        value={commentText}
+                                        onChange={(e) => setCommentText(e.target.value)}
+                                        placeholder="Share your thoughts..."
+                                        rows={2}
+                                        className="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
+                                    />
+
+                                    <div className="mt-2 flex items-center justify-end gap-2">
+                                        <Button
+                                            type="submit"
+                                            disabled={isSubmitting || !commentText.trim()}
+                                            className="!px-3 !py-1.5"
+                                        >
+                                            {isSubmitting ? "Posting..." : "Post"}
+                                        </Button>
+                                    </div>
+                                </div>
                             </div>
                         </form>
                     ) : (
