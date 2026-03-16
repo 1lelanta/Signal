@@ -72,9 +72,12 @@ const CommentInput = ({ onSubmit, parentId = null }) => {
                                     <button
                                         type="submit"
                                         disabled={!text.trim() && !imageFile}
-                                        className={`px-3 py-1.5 rounded-full text-sm font-medium ${text.trim() || imageFile ? 'bg-blue-600 text-white' : 'bg-slate-400 text-white/60 cursor-not-allowed'}`}
+                                        className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium shadow-sm ${text.trim() || imageFile ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-slate-400 text-white/60 cursor-not-allowed'}`}
                                     >
-                                        Post
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                                        </svg>
+                                        <span>Post</span>
                                     </button>
                                 </div>
                             </div>
