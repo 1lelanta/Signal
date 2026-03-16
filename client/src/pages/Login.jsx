@@ -64,7 +64,7 @@ const Login = () => {
   };
 
   // Demo credentials to help guests
-  const DEMO_ADMIN = { email: "admin2-demo@example.com", password: "Password123!" };
+  const DEMO_ADMIN = { email: "admin-demo@example.com", password: "Password123!" };
   const DEMO_USER = { email: "demo-user@example.com", password: "Password123!" };
 
   const useDemo = (creds) => {
