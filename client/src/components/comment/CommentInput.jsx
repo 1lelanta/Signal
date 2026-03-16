@@ -43,14 +43,17 @@ const CommentInput = ({ onSubmit, parentId = null }) => {
                         />
 
                         {isReply ? (
-                            // Inline circular reply button inside the textarea area (right side)
+                            // Inline circular reply icon button inside the textarea area (right side)
                             <button
                                 type="submit"
                                 disabled={!text.trim() && !imageFile}
                                 aria-label="Reply"
                                 className={`absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full ${text.trim() || imageFile ? 'bg-blue-600 text-white' : 'bg-slate-500 text-white/60 cursor-not-allowed'}`}
                             >
-                                Reply
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                                </svg>
+                                <span className="sr-only">Reply</span>
                             </button>
                         ) : (
                             <div className="mt-2 flex items-center justify-between">
