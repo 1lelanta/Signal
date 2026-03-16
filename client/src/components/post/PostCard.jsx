@@ -409,22 +409,6 @@ const PostCard = ({post})=>{
                                             {isSubmitting ? "Posting..." : "Comment"}
                                         </Button>
                                     </div>
-                                <div className="relative">
-                                    <input
-                                        type="text"
-                                        value={replyText}
-                                        onChange={(e) => setReplyText(e.target.value)}
-                                        placeholder="Comment..."
-                                        className="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 pr-20"
-                                    />
-                                        <Button
-                                            type="submit"
-                                            disabled={isReplySubmitting || !replyText.trim()}
-                                            className="!px-3 !py-1 absolute right-2 top-1/2 -translate-y-1/2"
-                                        >
-                                            {isReplySubmitting ? "Posting..." : "Comment"}
-                                        </Button>
-                                    </div>
                                 </div>
                             </div>
                         </form>
