@@ -23,7 +23,7 @@ export const getFeed = async(req, res)=>{
 
         if (!hasPaginationQuery) {
             const posts = await Post.find(filter)
-            .sort({depthScore:-1})
+            .sort({ depthScore: -1, createdAt: -1 })
             .populate("author", "username reputationScore avatar");
 
             return res.json(posts);
@@ -35,7 +35,7 @@ export const getFeed = async(req, res)=>{
 
         const [items, total] = await Promise.all([
             Post.find(filter)
-                .sort({ depthScore: -1 })
+                .sort({ depthScore: -1, createdAt: -1 })
                 .skip(skip)
                 .limit(limit)
                 .populate("author", "username reputationScore avatar"),
