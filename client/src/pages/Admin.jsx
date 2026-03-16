@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTheme } from "../app/themeContext";
 import { Link } from "react-router-dom";
 import api from "../services/axios";
 import { listReports } from "../services/reportAPI";
@@ -40,10 +41,12 @@ const Admin = () => {
     }catch(err){console.error(err)}
   };
 
+  const { isWarm } = useTheme();
+
   if (loading) return <div className="p-4">Loading admin...</div>;
 
   return (
-    <div className="p-6 space-y-6">
+    <div className={`min-h-screen p-6 space-y-6 ${isWarm ? 'bg-gradient-to-br from-stone-50 to-stone-100 text-slate-900' : 'bg-gradient-to-br from-slate-950 to-slate-900 text-white'}`}>
       <header className="flex items-center justify-between">
         <h1 className="text-3xl font-extrabold">Admin Dashboard</h1>
         <div className="flex items-center gap-3">
@@ -53,24 +56,24 @@ const Admin = () => {
       </header>
 
       <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="p-4 bg-white dark:bg-slate-900 rounded-lg shadow">
-          <div className="text-xs text-slate-400">Total users</div>
+        <div className={`p-4 rounded-lg shadow ${isWarm ? 'bg-white text-slate-900' : 'bg-slate-800 text-slate-200'}`}>
+          <div className={`text-xs ${isWarm ? 'text-slate-400' : 'text-slate-400'}`}>Total users</div>
           <div className="text-2xl font-bold mt-2">{users.length}</div>
           <div className="h-2 bg-slate-800/10 rounded mt-3">
             <div className="h-2 bg-purple-500 rounded" style={{ width: `${Math.min(100, users.length)}%` }} />
           </div>
         </div>
 
-        <div className="p-4 bg-white dark:bg-slate-900 rounded-lg shadow">
-          <div className="text-xs text-slate-400">Total posts</div>
+        <div className={`p-4 rounded-lg shadow ${isWarm ? 'bg-white text-slate-900' : 'bg-slate-800 text-slate-200'}`}>
+          <div className={`text-xs ${isWarm ? 'text-slate-400' : 'text-slate-400'}`}>Total posts</div>
           <div className="text-2xl font-bold mt-2">{posts.length}</div>
           <div className="h-2 bg-slate-800/10 rounded mt-3">
             <div className="h-2 bg-green-500 rounded" style={{ width: `${Math.min(100, posts.length)}%` }} />
           </div>
         </div>
 
-        <div className="p-4 bg-white dark:bg-slate-900 rounded-lg shadow">
-          <div className="text-xs text-slate-400">Open reports</div>
+        <div className={`p-4 rounded-lg shadow ${isWarm ? 'bg-white text-slate-900' : 'bg-slate-800 text-slate-200'}`}>
+          <div className={`text-xs ${isWarm ? 'text-slate-400' : 'text-slate-400'}`}>Open reports</div>
           <div className="text-2xl font-bold mt-2">{reports.length}</div>
           <div className="h-2 bg-slate-800/10 rounded mt-3">
             <div className="h-2 bg-red-500 rounded" style={{ width: `${Math.min(100, reports.length)}%` }} />
@@ -79,12 +82,12 @@ const Admin = () => {
       </section>
 
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="rounded-lg shadow bg-white dark:bg-slate-900 p-4">
+        <div className={`rounded-lg shadow p-4 ${isWarm ? 'bg-white text-slate-900' : 'bg-slate-800 text-slate-200'}`}>
           <h2 className="text-lg font-semibold mb-3">Users</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm table-auto">
               <thead>
-                <tr className="text-left text-xs text-slate-500">
+                <tr className={`text-left text-xs ${isWarm ? 'text-slate-500' : 'text-slate-300'}`}>
                   <th className="pb-2">Username</th>
                   <th className="pb-2">Email</th>
                   <th className="pb-2">Trust</th>
@@ -95,7 +98,7 @@ const Admin = () => {
                 {users.map((u) => (
                   <tr key={u._id} className="border-t">
                     <td className="py-3">{u.username}</td>
-                    <td className="py-3 text-slate-600">{u.email}</td>
+                    <td className="py-3">{u.email}</td>
                     <td className="py-3 font-medium">{u.trustLevel}</td>
                     <td className="py-3">
                       <select
@@ -116,7 +119,7 @@ const Admin = () => {
           </div>
         </div>
 
-        <div className="rounded-lg shadow bg-white dark:bg-slate-900 p-4">
+        <div className={`rounded-lg shadow p-4 ${isWarm ? 'bg-white text-slate-900' : 'bg-slate-800 text-slate-200'}`}>
           <h2 className="text-lg font-semibold mb-3">Recent Posts</h2>
           <ul className="space-y-3">
             {posts.map((p) => (
