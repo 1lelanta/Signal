@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "../ui/Button";
+import CommentInput from "../comment/CommentInput";
 import api from "../../services/axios";
 import { useAuth } from "../../features/auth/useAuth";
 import { getFollowStatus, toggleFollowUser } from "../../features/users/profileAPI";
@@ -184,6 +185,29 @@ const PostCard = ({post})=>{
         }
     };
 
+    // New reply submit handler used by CommentInput (text, parentId, imageFile)
+    const submitReplyFromComponent = async (text, parentId, imageFile) => {
+        const content = (text || "").trim();
+        if (!content) return;
+        try {
+            setIsReplySubmitting(true);
+            setCommentMessage("");
+            const payload = { content, type: "expansion" };
+            if (parentId) payload.parentCommentId = parentId;
+            if (imageFile) {
+                // TODO: handle image upload if supported; skip for now
+            }
+            const res = await api.post(`/comments/${post._id}`, payload);
+            if (res?.data) setComments((prev) => [...prev, res.data]);
+            setActiveReplyId(null);
+            setCommentMessage("Reply posted");
+        } catch (err) {
+            setCommentMessage(err?.response?.data?.message || "Failed to post reply");
+        } finally {
+            setIsReplySubmitting(false);
+        }
+    };
+
     const getReplies = (parentId) =>
         comments.filter((comment) => String(comment.parentComment || "") === String(parentId));
 
@@ -213,36 +237,7 @@ const PostCard = ({post})=>{
                 </div>
 
                 {activeReplyId === comment._id && user && (
-                    <form onSubmit={(e) => handleReplySubmit(e, comment._id)} className="mt-2">
-                        <div className="flex items-start gap-3">
-                            <div className="shrink-0">
-                                {user?.avatar ? (
-                                    <img src={user.avatar} alt={user.username} className="h-8 w-8 rounded-full object-cover border border-slate-700" />
-                                ) : (
-                                    <div className="h-8 w-8 rounded-full bg-slate-700 border border-slate-600 text-xs text-slate-200 font-semibold flex items-center justify-center">{getInitials(user?.username)}</div>
-                                )}
-                            </div>
-
-                            <div className="flex-1">
-                                <input
-                                    type="text"
-                                    value={replyText}
-                                    onChange={(e) => setReplyText(e.target.value)}
-                                    placeholder="Write a reply..."
-                                    className="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                />
-                                <div className="mt-2 flex justify-end">
-                                    <Button
-                                        type="submit"
-                                        disabled={isReplySubmitting || !replyText.trim()}
-                                        className="!px-3 !py-1"
-                                    >
-                                        {isReplySubmitting ? "Posting..." : "Post"}
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                    <CommentInput onSubmit={submitReplyFromComponent} parentId={comment._id} />
                 )}
 
                 {replies.length > 0 && (
