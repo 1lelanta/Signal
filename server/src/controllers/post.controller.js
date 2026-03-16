@@ -18,7 +18,8 @@ export const createPost = async (req, res)=>{
             content: safeContent || "",
             imageUrl: imageUrl || null,
             tags,
-            reflectionExpiresAt: new Date(Date.now()+2*60*1000)// 2min
+            reflectionExpiresAt: new Date(Date.now()+2*60*1000),// 2min
+            isPublished: true
         });
         res.status(201).json(post);
     } catch (error) {
