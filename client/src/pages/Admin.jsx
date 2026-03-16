@@ -48,16 +48,16 @@ const Admin = () => {
   return (
     <div className={`min-h-screen p-6 space-y-6 ${isWarm ? 'bg-gradient-to-br from-stone-50 to-stone-100 text-slate-900' : 'bg-gradient-to-br from-slate-950 to-slate-900 text-white'}`}>
       <header className="flex items-center justify-between">
-        <h1 className="text-3xl font-extrabold">Admin Dashboard</h1>
+        <h1 className={`text-3xl font-extrabold ${isWarm ? 'text-indigo-600' : 'text-indigo-300'}`}>Admin Dashboard</h1>
         <div className="flex items-center gap-3">
           <Link to="/admin/reports" className="px-3 py-1 rounded bg-amber-600 text-white text-sm">View Reports</Link>
-          <div className="text-sm text-slate-500">Summary view — moderator tools</div>
+          <div className={`text-sm ${isWarm ? 'text-slate-600' : 'text-slate-300'}`}>Summary view — moderator tools</div>
         </div>
       </header>
 
       <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className={`p-4 rounded-lg shadow ${isWarm ? 'bg-white text-slate-900' : 'bg-slate-800 text-slate-200'}`}>
-          <div className={`text-xs ${isWarm ? 'text-slate-400' : 'text-slate-400'}`}>Total users</div>
+          <div className={`text-xs ${isWarm ? 'text-slate-600' : 'text-slate-300'}`}>Total users</div>
           <div className="text-2xl font-bold mt-2">{users.length}</div>
           <div className="h-2 bg-slate-800/10 rounded mt-3">
             <div className="h-2 bg-purple-500 rounded" style={{ width: `${Math.min(100, users.length)}%` }} />
@@ -65,7 +65,7 @@ const Admin = () => {
         </div>
 
         <div className={`p-4 rounded-lg shadow ${isWarm ? 'bg-white text-slate-900' : 'bg-slate-800 text-slate-200'}`}>
-          <div className={`text-xs ${isWarm ? 'text-slate-400' : 'text-slate-400'}`}>Total posts</div>
+          <div className={`text-xs ${isWarm ? 'text-slate-600' : 'text-slate-300'}`}>Total posts</div>
           <div className="text-2xl font-bold mt-2">{posts.length}</div>
           <div className="h-2 bg-slate-800/10 rounded mt-3">
             <div className="h-2 bg-green-500 rounded" style={{ width: `${Math.min(100, posts.length)}%` }} />
@@ -73,7 +73,7 @@ const Admin = () => {
         </div>
 
         <div className={`p-4 rounded-lg shadow ${isWarm ? 'bg-white text-slate-900' : 'bg-slate-800 text-slate-200'}`}>
-          <div className={`text-xs ${isWarm ? 'text-slate-400' : 'text-slate-400'}`}>Open reports</div>
+          <div className={`text-xs ${isWarm ? 'text-slate-600' : 'text-slate-300'}`}>Open reports</div>
           <div className="text-2xl font-bold mt-2">{reports.length}</div>
           <div className="h-2 bg-slate-800/10 rounded mt-3">
             <div className="h-2 bg-red-500 rounded" style={{ width: `${Math.min(100, reports.length)}%` }} />
@@ -83,11 +83,11 @@ const Admin = () => {
 
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className={`rounded-lg shadow p-4 ${isWarm ? 'bg-white text-slate-900' : 'bg-slate-800 text-slate-200'}`}>
-          <h2 className="text-lg font-semibold mb-3">Users</h2>
+          <h2 className={`text-lg font-semibold mb-3 ${isWarm ? 'text-slate-800' : 'text-slate-100'}`}>Users</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm table-auto">
               <thead>
-                <tr className={`text-left text-xs ${isWarm ? 'text-slate-500' : 'text-slate-300'}`}>
+                <tr className={`text-left text-xs ${isWarm ? 'text-slate-600' : 'text-slate-300'}`}>
                   <th className="pb-2">Username</th>
                   <th className="pb-2">Email</th>
                   <th className="pb-2">Trust</th>
@@ -97,9 +97,9 @@ const Admin = () => {
               <tbody>
                 {users.map((u) => (
                   <tr key={u._id} className="border-t">
-                    <td className="py-3">{u.username}</td>
-                    <td className="py-3">{u.email}</td>
-                    <td className="py-3 font-medium">{u.trustLevel}</td>
+                    <td className={`py-3 ${isWarm ? 'text-slate-800' : 'text-slate-100'}`}>{u.username}</td>
+                    <td className={`py-3 ${isWarm ? 'text-slate-700' : 'text-slate-200'}`}>{u.email}</td>
+                    <td className={`py-3 font-medium ${isWarm ? 'text-slate-800' : 'text-slate-100'}`}>{u.trustLevel}</td>
                     <td className="py-3">
                       <select
                         defaultValue={u.trustLevel}
@@ -120,7 +120,7 @@ const Admin = () => {
         </div>
 
         <div className={`rounded-lg shadow p-4 ${isWarm ? 'bg-white text-slate-900' : 'bg-slate-800 text-slate-200'}`}>
-          <h2 className="text-lg font-semibold mb-3">Recent Posts</h2>
+          <h2 className={`text-lg font-semibold mb-3 ${isWarm ? 'text-slate-800' : 'text-slate-100'}`}>Recent Posts</h2>
           <ul className="space-y-3">
             {posts.map((p) => (
               <li key={p._id} className="flex items-start justify-between gap-4">
