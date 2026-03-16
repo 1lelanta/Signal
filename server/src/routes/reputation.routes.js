@@ -12,15 +12,15 @@ router.post(
     async(req, res)=>{
         const {points,reason, sourceType,sourceId} = req.body;
 
-        await updateReputation(
-            req.params.userId,
-            points,
-            reason,
-            sourceType,
-            sourceId
-        );
+            const result = await updateReputation(
+                req.params.userId,
+                points,
+                reason,
+                sourceType,
+                sourceId
+            );
 
-        res.json({message: "Reputation updated"});
+            res.json({ message: "Reputation updated", ...result });
     }
 );
 

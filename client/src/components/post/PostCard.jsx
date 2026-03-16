@@ -371,6 +371,39 @@ const PostCard = ({post})=>{
                                 <div className="absolute right-0 mt-2 w-44 bg-slate-900 border border-slate-700 rounded-md p-2 shadow-lg z-20">
                                     <div className="flex flex-col gap-2 text-slate-200">
                                         <button onClick={() => { /* placeholder for other actions */ }} className="text-sm text-slate-200 text-left">Save</button>
+                                        {user?.trustLevel === "moderator" && (
+                                            <button
+                                                onClick={async () => {
+                                                    try {
+                                                        const pointsStr = window.prompt("Points to award (e.g. 10 or -5):", "10");
+                                                        if (!pointsStr) return;
+                                                        const points = Number(pointsStr);
+                                                        if (Number.isNaN(points)) {
+                                                            window.alert("Invalid points value");
+                                                            return;
+                                                        }
+                                                        const reason = window.prompt("Reason for awarding reputation:", "Helpful post");
+                                                        if (reason === null) return;
+                                                        const res = await api.post(`/reputation/${post.author._id}`, {
+                                                            points,
+                                                            reason,
+                                                            sourceType: "post",
+                                                            sourceId: post._id,
+                                                        });
+                                                        if (res?.data) {
+                                                            window.alert(`Reputation updated: ${res.data.score}`);
+                                                        } else {
+                                                            window.alert("Reputation updated");
+                                                        }
+                                                    } catch (err) {
+                                                        window.alert(err?.response?.data?.message || err.message || "Failed to award reputation");
+                                                    }
+                                                }}
+                                                className="text-sm text-slate-200 text-left"
+                                            >
+                                                Award reputation
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
                             )}

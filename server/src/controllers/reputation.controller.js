@@ -1,6 +1,7 @@
 import Reputation from "../models/Reputation.model.js";
-import User from "../models/User.model.js"
+import User from "../models/User.model.js";
 import { calculateReputation } from "../utils/calculateReputation.js";
+import { getIO } from "../config/socket.js";
 
 
 export const updateReputation = async(userId, points, reason,sourceType,sourceId )=>{
@@ -29,6 +30,13 @@ export const updateReputation = async(userId, points, reason,sourceType,sourceId
 
     await user.save();
 
+    try {
+        const io = getIO();
+        io.to(`reputation_${user._id}`).emit("reputation:update", { userId: String(user._id), score: user.reputationScore });
+    } catch (e) {
+        // socket may not be initialized in some contexts; ignore
+    }
+
     return {
         score: calculation.score,
         eventsCount: calculation.eventsCount,
@@ -55,6 +63,10 @@ export const getReputation = async (userId) => {
         }
 
         await user.save();
+        try {
+            const io = getIO();
+            io.to(`reputation_${user._id}`).emit("reputation:update", { userId: String(user._id), score: user.reputationScore });
+        } catch (e) {}
     }
 
     return {
