@@ -5,6 +5,7 @@ import CommentInput from "../comment/CommentInput";
 import api from "../../services/axios";
 import { useAuth } from "../../features/auth/useAuth";
 import { getFollowStatus, toggleFollowUser } from "../../features/users/profileAPI";
+import { useTheme } from "../../app/themeContext";
 
 const getInitials = (name = "User") => {
     const parts = String(name).trim().split(/\s+/).filter(Boolean);
@@ -13,6 +14,7 @@ const getInitials = (name = "User") => {
 };
 
 const PostCard = ({post})=>{
+    const { isWarm } = useTheme();
     const { user } = useAuth();
     const userId = user?._id || user?.id;
     const authorId = post.author?._id;
@@ -211,12 +213,20 @@ const PostCard = ({post})=>{
     const getReplies = (parentId) =>
         comments.filter((comment) => String(comment.parentComment || "") === String(parentId));
 
+    const cardClass = isWarm
+        ? "ml-3 overflow-hidden bg-stone-100 border border-stone-200 rounded-xl p-4 sm:p-5 hover:shadow-lg hover:scale-[1.01] transform transition duration-300 text-stone-900"
+        : "ml-3 overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border border-slate-800 rounded-xl p-4 sm:p-5 hover:shadow-2xl hover:scale-[1.01] transform transition duration-300 text-slate-100";
+
+    const commentClass = isWarm
+        ? "bg-stone-50 border border-stone-200 rounded-md px-3 py-2"
+        : "bg-slate-800/70 border border-slate-700 rounded-md px-3 py-2";
+
     const renderCommentItem = (comment, level = 0) => {
         const replies = getReplies(comment._id);
 
         return (
             <div key={comment._id} className="space-y-2" style={{ marginLeft: `${Math.min(level, 3) * 16}px` }}>
-                <div className="bg-slate-800/70 border border-slate-700 rounded-md px-3 py-2">
+                <div className={commentClass}>
                     <p className="text-xs text-slate-400">{comment.author?.username || "User"}</p>
                     <p className="text-sm text-slate-200 mt-1 break-words">{comment.content}</p>
                     <button
@@ -255,7 +265,7 @@ const PostCard = ({post})=>{
         <div className="relative">
             <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-purple-500 to-pink-500 opacity-40 rounded-l-xl" />
 
-            <div className="ml-3 overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border border-slate-800 rounded-xl p-4 sm:p-5 hover:shadow-2xl hover:scale-[1.01] transform transition duration-300 text-slate-100">
+            <div className={cardClass}>
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3 mb-3">
                 <Link to={`/profile/${post.author._id}`} className="inline-flex items-center gap-2 min-w-0">
@@ -271,7 +281,7 @@ const PostCard = ({post})=>{
                         </div>
                     )}
                     <div className="min-w-0">
-                      <div className="text-sm font-semibold text-slate-100 truncate">{post.author.username}</div>
+                      <div className={`text-sm font-semibold ${isWarm ? 'text-stone-900' : 'text-slate-100'} truncate`}>{post.author.username}</div>
                       <div className="text-xs text-slate-400">{post.author?.headline || post.author?.role || ''}</div>
                     </div>
                 </Link>
@@ -305,7 +315,7 @@ const PostCard = ({post})=>{
             {/* content */}
 
             <Link to={`/post/${post._id}`}>
-            <p className="text-slate-100 leading-relaxed text-sm mb-4 break-words">
+            <p className={`${isWarm ? 'text-stone-900' : 'text-slate-100'} leading-relaxed text-sm mb-4 break-words`}>
                 {post.content}
             </p>
             {post.imageUrl && (
@@ -425,7 +435,7 @@ const PostCard = ({post})=>{
                                             onChange={(e) => setCommentText(e.target.value)}
                                             placeholder="Comment..."
                                             rows={2}
-                                            className="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none pr-20"
+                                            className={`w-full ${isWarm ? 'bg-stone-50 text-stone-900 border border-stone-200' : 'bg-slate-800 text-slate-100 border border-slate-700'} rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none pr-20`}
                                         />
 
                                         <Button
