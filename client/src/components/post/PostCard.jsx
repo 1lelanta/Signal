@@ -214,11 +214,11 @@ const PostCard = ({post})=>{
         comments.filter((comment) => String(comment.parentComment || "") === String(parentId));
 
     const cardClass = isWarm
-        ? "ml-3 overflow-hidden bg-stone-100 border border-stone-200 rounded-xl p-4 sm:p-5 hover:shadow-lg hover:scale-[1.01] transform transition duration-300 text-stone-900"
+        ? "ml-3 overflow-hidden bg-white border border-gray-200 rounded-xl p-4 sm:p-5 hover:shadow-lg hover:scale-[1.01] transform transition duration-300 text-slate-900"
         : "ml-3 overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border border-slate-800 rounded-xl p-4 sm:p-5 hover:shadow-2xl hover:scale-[1.01] transform transition duration-300 text-slate-100";
 
     const commentClass = isWarm
-        ? "bg-stone-50 border border-stone-200 rounded-md px-3 py-2"
+        ? "bg-white border border-gray-200 rounded-md px-3 py-2"
         : "bg-slate-800/70 border border-slate-700 rounded-md px-3 py-2";
 
     const renderCommentItem = (comment, level = 0) => {
@@ -227,8 +227,8 @@ const PostCard = ({post})=>{
         return (
             <div key={comment._id} className="space-y-2" style={{ marginLeft: `${Math.min(level, 3) * 16}px` }}>
                 <div className={commentClass}>
-                    <p className="text-xs text-slate-400">{comment.author?.username || "User"}</p>
-                    <p className="text-sm text-slate-200 mt-1 break-words">{comment.content}</p>
+                    <p className={`text-xs ${isWarm ? 'text-slate-600' : 'text-slate-400'}`}>{comment.author?.username || "User"}</p>
+                    <p className={`${isWarm ? 'text-slate-900' : 'text-sm text-slate-200'} mt-1 break-words`}>{comment.content}</p>
                     <button
                         type="button"
                         onClick={() => {
